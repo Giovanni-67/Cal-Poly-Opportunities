@@ -1,12 +1,8 @@
-# TARGET: today's build
+# SPEC
 
-Choose the idea, person, interaction, and visual direction. The agent can help phrase and save your decisions after you approve them. The provided scope and review safeguards stay in place.
-
-- **Thing:** [My one-page website or mini-app and its main interaction.]
-- **Audience:** [One specific person, and what they want to do or understand.]
-- **Requirements:** One working primary interaction; selected states and results are understandable; honor my approved standing rule in AGENTS.md.
-- **Guardrails:** Static browser code. No required external service, keys, accounts, runtime AI, or private data. Label fictional or sample content. Preserve the example and publishing setup. Work on a branch and wait for human review before shipping.
-- **Experience:** [My visual reference or direction and the most important layout or interaction relationship.]
-- **Test:** I can complete the main action, check one boundary or factual claim, and point to my standing rule's effect in the actual preview. After I approve and merge, the same registered Pages URL works.
-
-The coastal example has a [completed TARGET](examples/coast/SPEC.md). It demonstrates the format, not a required topic.
+1. **TARGET USER:** A Cal Poly student who wants to build experience and strengthen their resume but does not know which opportunities match their interests.
+2. **TARGET OUTCOME:** The student quickly discovers relevant Cal Poly opportunities across internships, research, clubs, competitions, startups, and hardware paths.
+3. **TARGET PAGE:** One responsive, clean, modern Cal Poly-inspired page using subtle green/gold accents, minimal clutter, and professional academic tone.
+4. **TARGET INTERACTION:** The interface supports two valid entry paths: (a) interest-first then refine, and (b) major-search-first then refine; both trigger **Find Opportunities** and render matched cards in the results section.
+5. **TARGET FILTER + RESULT ORDER:** Clickable opportunity-type filters and major-aware search refine results, and newly matched cards are appended to the bottom of the existing result list (never inserted at the top).
+6. **TARGET CARD UX:** Each card shows title, top-right colored tag, and brief description; on click, the card animates to centered focus with blurred backdrop, expands with a dropdown reveal, and includes a **Link** button for opportunity details.

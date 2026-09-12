@@ -19,7 +19,9 @@ After STOP 1, help the student propose and approve the six TARGET lines and one 
 
 ## My standing rule
 
-[One observable, student-approved rule that protects this project's purpose or experience.]
+**Every displayed opportunity must have a verified official source link and a clear explanation of why it matches the student's search; never invent opportunities or imply that applications are currently open without verification.**
+
+Major and interests guide discovery, never restrict who may explore. Do not show eligibility fields or imply universal participation eligibility. Keep Browse all available. The student confirmed STOP 1, approved the design and rule, and explicitly authorized implementation, tested commits, pushes, and merges on September 12, 2026.
 
 ## Workflow
 

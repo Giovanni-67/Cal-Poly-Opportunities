@@ -1,3 +1,36 @@
+# Cal Poly Opportunity Matcher
+
+An independent student-built discovery tool for Cal Poly students looking for clubs, research, competitions, startups, hands-on projects, and internship resources.
+
+Search by major or interest, select multiple interests, and refine by opportunity type. Open a card for its matching explanation and official Learn more link. Browse all is always available; major associations are discovery suggestions, not eligibility filters.
+
+## Current version
+
+- 18 curated entries with official Cal Poly sources reviewed September 12, 2026.
+- Responsive green-and-gold interface, animated centered cards and background blur, expandable details, keyboard focus management, and reduced-motion support.
+- Static HTML/CSS/JavaScript with no framework, installation, accounts, API keys, analytics, or runtime network requests. External links may lead to services with their own sign-in requirements.
+- Deterministic local matching with common aliases (AI, CS, CPE, EE, ME), type filters, and stable discovery ordering without duplicates.
+- Honest empty and data-error states. This is a curated starting point, not a complete directory or live vacancies feed. Internship entries link to official discovery resources, not specific open positions.
+
+## Run and verify
+
+Serve this folder with any static HTTP server, such as `python -m http.server 8000` (or `py -m http.server 8000` on Windows with the Python launcher), then open `http://localhost:8000/`. No build step is required. GitHub Pages uses the existing root publishing setup.
+
+Run the dependency-free automated tests with Node.js 18 or newer:
+
+```sh
+node --test tests/matcher.test.cjs
+node tests/check.cjs
+```
+
+Open `http://localhost:8000/tests/browser.html` for the real-DOM browser regression suite. It tests the actual page/controller in an iframe, including malformed data and safe text rendering. Native keyboard interaction, responsive layouts, and visual fidelity also require browser review; the suite's simulated reduced-motion preference tests the JavaScript branch, not the OS setting.
+
+Data and matching rules are in `data.js` and `matcher.js`; UI behavior is in `app.js`. Read [SPEC.md](SPEC.md), [AGENTS.md](AGENTS.md), and [SOURCES.md](SOURCES.md) before changes. Verify the official page before adding or updating a record, and keep its source/review date accurate. Tags and major mappings are editorial associations. Search text and interest chips combine with AND; multiple selected interests combine with OR. Only current matches are shown; previously seen matches retain discovery order and new matches append. Browse all clears filters and resets ordering.
+
+The original teaching guide follows. The coastal example and shared teaching documents are preserved independently of this app; their historical test notes describe the template, not current matcher verification.
+
+---
+
 # The Understudy
 
 **Last week you told AI what to build. This week, teach it how to work for you.**

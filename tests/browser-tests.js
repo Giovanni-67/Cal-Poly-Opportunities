@@ -189,7 +189,7 @@
   await check('complete production catalog is reachable in order without duplicates', async () => {
     await load({ fullCatalog: true, reduced: true });
     const expected = frame.contentWindow.OPPORTUNITIES;
-    equal(expected.length, 419); equal(cards().length, 24);
+    equal(expected.length, 429); equal(cards().length, 24);
     for (let page = 1; page < Math.ceil(expected.length / 24); page++) $('load-more').click();
     equal(ids(), expected.map(item => item.id)); equal(new Set(ids()).size, expected.length);
     assert($('load-more').hidden, 'last page complete');
@@ -203,7 +203,7 @@
     }
     search('Gamma Zeta Alpha'); assert(ids().includes('now-325048'), 'last directory entry searchable');
     $('browse-all').click(); equal(cards().length, 24);
-    search('   '); assert($('status').textContent.includes('Found all 419'), 'blank full-catalog feedback');
+    search('   '); assert($('status').textContent.includes('Found all 429'), 'blank full-catalog feedback');
   });
   await check('broader interests and major suggestions use real catalog data', () => {
     for (const interest of ['business', 'arts', 'service', 'outdoors']) {

@@ -26,7 +26,7 @@ test('snapshot contains exactly the 406 public SLO organization IDs reviewed fro
 });
 
 test('full catalog retains original entries and includes each directory club exactly once', () => {
-  assert.equal(catalog.length, 419);
+  assert.equal(catalog.length, 429);
   assert.ok(matcher.validData(catalog));
   for (const item of directory) assert.equal(catalog.filter(row => row.directoryId === item.directoryId).length, 1, item.title);
   for (const id of ['csai', 'security', 'hack4impact', 'wish', 'games']) {
@@ -50,8 +50,23 @@ test('search reaches broader majors and interests with honest reasons', () => {
     assert.ok(result.matches.length > 0);
     assert.ok(result.matches.every(({ item }) => item.tags.includes(interest) && item.type === 'club'));
   }
-  assert.deepEqual(matcher.findMatches(catalog, { query: 'volunteering' }), matcher.findMatches(catalog, { query: 'service' }));
+  // Aliases produce the same records; full-text reasons may echo the typed query.
+  const ids = query => matcher.findMatches(catalog, { query }).matches.map(match => match.item.id);
+  assert.deepEqual(ids('volunteering'), ids('service'));
   assert.deepEqual(matcher.findMatches(catalog, { query: 'quantum banana' }).matches, []);
+});
+
+test('ten additional programs remain discoverable without claiming open applications', () => {
+  const expected = ['cafes-surp', 'frost-surp', 'beacon', 'cie-accelerator', 'elevator-pitch', 'startup-marathon', 'college-corps', 'rose-float', 'cal-poly-racing', 'cubesat-polysat'];
+  const programs = catalog.filter(item => expected.includes(item.id));
+  assert.equal(programs.length, 10);
+  for (const item of programs) {
+    assert.ok(matcher.findMatches(catalog, { query: item.title, type: item.type }).matches.some(match => match.item.id === item.id), item.id);
+    assert.ok(item.note.includes('not a confirmed opening'));
+    assert.ok(!Object.hasOwn(item, 'eligibility'));
+  }
+  assert.ok(matcher.findMatches(catalog, { interests: ['service'], type: 'hands-on' }).matches.some(match => match.item.id === 'college-corps'));
+  assert.ok(matcher.findMatches(catalog, { query: 'animal science', type: 'research' }).matches.some(match => match.item.id === 'cafes-surp'));
 });
 
 test('clubs without a major association remain searchable and unrestricted', () => {

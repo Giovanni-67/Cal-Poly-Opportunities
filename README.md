@@ -6,7 +6,7 @@ Search by major or interest, select multiple interests, and refine by opportunit
 
 ## Current version
 
-- 419 sourced entries, including all 406 San Luis Obispo student organizations in the reviewed public Cal Poly Now snapshot. Five overlaps with the original collection are merged without duplicate cards. Sources reviewed September 12, 2026.
+- 429 sourced entries, including all 406 San Luis Obispo student organizations in the reviewed public Cal Poly Now snapshot. The original 18 entries are retained, 401 additional clubs are included without duplicates, and 10 research, startup, competition, and hands-on programs are added. Sources reviewed September 12, 2026.
 - Business, Arts, Service, and Outdoors interest filters join the original six. Search suggestions reflect the collection’s major and interest tags.
 - Results appear in batches of 24 with a Show more control. Searches cover the whole collection, including cards that have not been displayed yet. General-interest clubs can have no major association.
 - Responsive green-and-gold interface, animated centered cards and background blur, expandable details, keyboard focus management, and reduced-motion support.

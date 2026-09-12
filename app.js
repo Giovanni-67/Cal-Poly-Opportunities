@@ -2,10 +2,43 @@
 
 (function () {
   const $ = id => document.getElementById(id);
+  const views = [...document.querySelectorAll('[data-view]')];
+  const navigation = [...document.querySelectorAll('nav a')];
+  const headings = { explore: 'page-title', about: 'about-title', resources: 'resources-title' };
+  function showView(moveFocus = true) {
+    const destination = location.hash.slice(1);
+    const view = Object.hasOwn(headings, destination) ? destination : 'explore';
+    views.forEach(panel => { panel.hidden = panel.id !== view; });
+    navigation.forEach(link => {
+      const active = link.hash === `#${view}`;
+      link.classList.toggle('active', active);
+      if (active) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    });
+    document.title = view === 'explore' ? 'Cal Poly Opportunities — Find your next opportunity' : `${view === 'about' ? 'About' : 'Resources'} — Cal Poly Opportunities`;
+    if ($('opportunity-dialog').open) $('opportunity-dialog').close();
+    if (moveFocus) {
+      const target = $(destination === 'search' ? 'search' : headings[view]);
+      target.focus({ preventScroll: true });
+      target.scrollIntoView({ block: 'start' });
+    }
+  }
+  // Keep hash links and browser Back/Forward working without reloading search state.
+  document.addEventListener('click', event => {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const destination = link.getAttribute('href').slice(1);
+    if (!Object.hasOwn(headings, destination) && destination !== 'search') return;
+    event.preventDefault();
+    if (location.hash === `#${destination}`) showView();
+    else location.hash = destination;
+  });
+  addEventListener('hashchange', () => showView());
+  showView(!!location.hash);
   const matcher = globalThis.OpportunityMatcher;
   const status = $('status');
   if (!matcher) {
-    status.textContent = 'Search could not load. Please reload the page or explore the official resources below.';
+    status.textContent = 'Search could not load. Please reload the page or use Resources in the navigation.';
     return;
   }
   const { findMatches, orderMatches, TYPES } = matcher;
@@ -79,7 +112,7 @@
     document.body.classList.remove('modal-open');
     dialog.classList.remove('closing');
     closing = false;
-    if (trigger?.isConnected) trigger.focus({ preventScroll: true });
+    if (trigger?.isConnected && !trigger.closest('[hidden]')) trigger.focus({ preventScroll: true });
   });
   $('close-dialog').addEventListener('click', closeOpportunity);
   dialog.addEventListener('cancel', event => { event.preventDefault(); closeOpportunity(); });
@@ -147,9 +180,18 @@
     $('empty-state').hidden = !!outcome.error || ordered.matches.length > 0;
     const count = ordered.matches.length;
     const filtered = options.query.trim() || options.interests.length || options.type !== 'all';
-    status.textContent = outcome.error || (filtered ? `${count} ${count === 1 ? 'match' : 'matches'} in this collection. Broaden your search anytime.` : `${count} ways to get involved. Choose a major or interest to find your starting point.`);
+    if (outcome.error) status.textContent = outcome.error;
+    else if (filtered) status.textContent = `${count} ${count === 1 ? 'match' : 'matches'} in this collection. Broaden your search anytime.`;
+    else if (initial) status.textContent = `${count} ways to get involved. Choose a major or interest to find your starting point.`;
+    else status.textContent = `Showing all ${count} opportunities. Add a major or interest to narrow your search.`;
   }
-  form.addEventListener('submit', event => { event.preventDefault(); render(); });
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    render();
+    const heading = $('results-title');
+    heading.focus({ preventScroll: true });
+    heading.scrollIntoView({ behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'start' });
+  });
   form.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => input.addEventListener('change', () => render()));
   $('browse-all').addEventListener('click', () => {
     form.reset();

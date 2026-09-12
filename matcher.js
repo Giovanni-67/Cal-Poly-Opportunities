@@ -34,7 +34,7 @@
     );
   }
   function findMatches(data, { query = '', interests = [], type = 'all' } = {}) {
-    if (!validData(data)) return { error: 'The opportunity collection could not be loaded. Please reload the page or explore the official resources below.', matches: [] };
+    if (!validData(data)) return { error: 'The opportunity collection could not be loaded. Please reload the page or use Resources in the navigation.', matches: [] };
     if (typeof query !== 'string' || query.length > 200 || !Array.isArray(interests) || interests.some(key => !Object.hasOwn(INTERESTS, key)) || (type !== 'all' && !Object.hasOwn(TYPES, type))) {
       return { error: 'Please use a search of up to 200 characters and the available filters.', matches: [] };
     }

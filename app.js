@@ -50,6 +50,18 @@
   let trigger = null;
   let closing = false;
   let openingAnimation = null;
+  const pageSize = 24;
+  let currentMatches = [];
+  let shown = 0;
+
+  if (matcher.validData(globalThis.OPPORTUNITIES)) {
+    const suggestions = [...new Set(globalThis.OPPORTUNITIES.flatMap(item => [...item.majors, ...item.tags]))].sort();
+    $('search-suggestions').replaceChildren(...suggestions.map(value => {
+      const option = document.createElement('option');
+      option.value = matcher.INTERESTS[value] || value.charAt(0).toUpperCase() + value.slice(1);
+      return option;
+    }));
+  }
 
   function icon(name) {
     const allowed = ['people', 'gear', 'flask', 'bulb', 'shield', 'code', 'briefcase', 'arrow'];
@@ -166,6 +178,15 @@
     li.append(button);
     return li;
   }
+  function showNextPage(moveFocus = false) {
+    const next = currentMatches.slice(shown, shown + pageSize).map(card);
+    results.append(...next);
+    shown += next.length;
+    $('load-more').hidden = shown >= currentMatches.length;
+    $('result-range').textContent = currentMatches.length ? `Showing ${shown} of ${currentMatches.length} opportunities` : '';
+    if (moveFocus && next.length) next[0].querySelector('button').focus({ preventScroll: true });
+  }
+  $('load-more').addEventListener('click', () => showNextPage(true));
   function render(initial = false) {
     const options = {
       query: $('search').value,
@@ -176,14 +197,17 @@
     const ordered = orderMatches(outcome.matches, history);
     // The initial overview must not pre-seed a user's discovery ordering.
     if (!initial) history = ordered.history;
-    results.replaceChildren(...ordered.matches.map(card));
+    currentMatches = ordered.matches;
+    shown = 0;
+    results.replaceChildren();
+    showNextPage();
     $('empty-state').hidden = !!outcome.error || ordered.matches.length > 0;
     const count = ordered.matches.length;
     const filtered = options.query.trim() || options.interests.length || options.type !== 'all';
     if (outcome.error) status.textContent = outcome.error;
     else if (filtered) status.textContent = `${count} ${count === 1 ? 'match' : 'matches'} in this collection. Broaden your search anytime.`;
     else if (initial) status.textContent = `${count} ways to get involved. Choose a major or interest to find your starting point.`;
-    else status.textContent = `Showing all ${count} opportunities. Add a major or interest to narrow your search.`;
+    else status.textContent = `${count <= pageSize ? 'Showing' : 'Found'} all ${count} opportunities. Add a major or interest to narrow your search.`;
   }
   form.addEventListener('submit', event => {
     event.preventDefault();

@@ -2,7 +2,7 @@
 
 (function () {
   const TYPES = { club: 'Club', research: 'Research', internship: 'Internship', competition: 'Competition', startup: 'Startup', 'hands-on': 'Hands-on' };
-  const INTERESTS = { ai: 'AI', software: 'Software', cybersecurity: 'Cybersecurity', research: 'Research', startups: 'Startups', hardware: 'Hardware' };
+  const INTERESTS = { ai: 'AI', software: 'Software', cybersecurity: 'Cybersecurity', research: 'Research', startups: 'Startups', hardware: 'Hardware', business: 'Business', arts: 'Arts', service: 'Service', outdoors: 'Outdoors' };
   const ALIASES = {
     ai: 'ai', 'artificial intelligence': 'ai', 'machine learning': 'ai', ml: 'ai',
     software: 'software', coding: 'software', programming: 'software',
@@ -11,7 +11,8 @@
     hardware: 'hardware', robotics: 'hardware', robots: 'hardware',
     cs: 'computer science', csc: 'computer science', 'comp sci': 'computer science',
     cpe: 'computer engineering', ee: 'electrical engineering', me: 'mechanical engineering',
-    se: 'software engineering', business: 'business administration', finance: 'business administration',
+    se: 'software engineering', business: 'business administration',
+    volunteering: 'service', volunteer: 'service', outdoor: 'outdoors', art: 'arts',
     stats: 'statistics', math: 'mathematics', bio: 'biology',
     'graphic design': 'art and design', ux: 'design', 'user experience': 'design',
     gaming: 'games', 'game development': 'games', internship: 'internships'
@@ -30,7 +31,7 @@
     return Array.isArray(data) && data.length > 0 && new Set(data.map(item => item?.id)).size === data.length && data.every(item =>
       item && ['id', 'title', 'description', 'sourceName'].every(key => typeof item[key] === 'string' && item[key].trim()) &&
       Object.hasOwn(TYPES, item.type) && safeSource(item.source) && /^\d{4}-\d{2}-\d{2}$/.test(item.reviewed) &&
-      ['tags', 'majors'].every(key => Array.isArray(item[key]) && item[key].length > 0 && item[key].every(value => typeof value === 'string' && normalize(value)))
+      ['tags', 'majors'].every(key => Array.isArray(item[key]) && (key === 'majors' || item[key].length > 0) && item[key].every(value => typeof value === 'string' && normalize(value)))
     );
   }
   function findMatches(data, { query = '', interests = [], type = 'all' } = {}) {
@@ -49,7 +50,7 @@
       if (interests.length && !matchedInterests.length) continue;
       const major = item.majors.find(value => normalize(value) === term);
       const topic = item.tags.find(value => normalize(value) === term);
-      const textMatch = raw && term.split(' ').every(word => contains([item.title, item.description, ...item.tags, ...item.majors].join(' '), word));
+      const textMatch = raw && term.split(' ').every(word => contains([item.title, item.directoryTitle || '', item.description, ...item.tags, ...item.majors].join(' '), word));
       if (raw && !major && !topic && !textMatch) continue;
       const reasons = [];
       if (major) reasons.push(`Connected to ${major}`);

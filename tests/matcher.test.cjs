@@ -1,7 +1,9 @@
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const data = require('../data.js');
+// Keep the original 18-entry regression fixture stable as the catalog grows.
+// catalog.test.cjs separately tests the complete production collection.
+const data = require('../data.js').slice(0, 18);
 const { findMatches, orderMatches, safeSource, validData, normalize } = require('../matcher.js');
 const ids = result => result.matches.map(match => match.item.id);
 
@@ -58,6 +60,13 @@ test('missing, malformed, duplicate and unsafe datasets fail clearly', () => {
 test('official URLs reject spoofed domains, credentials, protocols, and ports', () => {
   for (const url of ['javascript:alert(1)', 'http://calpoly.edu/', 'https://calpoly.edu.evil.com/', 'https://evilcalpoly.edu/', 'https://a:b@calpoly.edu/', 'https://calpoly.edu:444/', null]) assert.equal(safeSource(url), false);
   assert.equal(safeSource('https://studentresearch.calpoly.edu/'), true);
+});
+test('general-interest clubs need no invented major association', () => {
+  const club = { ...data[0], id: 'chess', title: 'Chess Club', directoryTitle: '', description: 'Explore chess.', tags: ['chess'], majors: [] };
+  assert.ok(validData([club]));
+  assert.equal(findMatches([club], { query: 'chess' }).matches.length, 1);
+  assert.equal(findMatches([club], { query: 'computer science' }).matches.length, 0);
+  for (const majors of [null, undefined, 'biology', [null], ['']]) assert.equal(validData([{ ...club, majors }]), false);
 });
 test('repeat searches and duplicate interests are deterministic and do not mutate data', () => {
   const before = JSON.stringify(data);

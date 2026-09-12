@@ -180,9 +180,18 @@
     $('empty-state').hidden = !!outcome.error || ordered.matches.length > 0;
     const count = ordered.matches.length;
     const filtered = options.query.trim() || options.interests.length || options.type !== 'all';
-    status.textContent = outcome.error || (filtered ? `${count} ${count === 1 ? 'match' : 'matches'} in this collection. Broaden your search anytime.` : `${count} ways to get involved. Choose a major or interest to find your starting point.`);
+    if (outcome.error) status.textContent = outcome.error;
+    else if (filtered) status.textContent = `${count} ${count === 1 ? 'match' : 'matches'} in this collection. Broaden your search anytime.`;
+    else if (initial) status.textContent = `${count} ways to get involved. Choose a major or interest to find your starting point.`;
+    else status.textContent = `Showing all ${count} opportunities. Add a major or interest to narrow your search.`;
   }
-  form.addEventListener('submit', event => { event.preventDefault(); render(); });
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    render();
+    const heading = $('results-title');
+    heading.focus({ preventScroll: true });
+    heading.scrollIntoView({ behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'start' });
+  });
   form.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => input.addEventListener('change', () => render()));
   $('browse-all').addEventListener('click', () => {
     form.reset();

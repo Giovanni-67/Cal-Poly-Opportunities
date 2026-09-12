@@ -12,6 +12,7 @@ Search by major or interest, select multiple interests, and refine by opportunit
 - Static HTML/CSS/JavaScript with no framework, installation, accounts, API keys, analytics, or runtime network requests. External links may lead to services with their own sign-in requirements.
 - Deterministic local matching with common aliases (AI, CS, CPE, EE, ME), type filters, and stable discovery ordering without duplicates.
 - Honest empty and data-error states. This is a curated starting point, not a complete directory or live vacancies feed. Internship entries link to official discovery resources, not specific open positions.
+- Submitting an empty or whitespace-only search shows all opportunities (or the selected filters' matches), announces the result count, and brings results into view. Search focus follows the rounded outer control; keyboard focus remains visible on interactive controls.
 
 ## Run and verify
 

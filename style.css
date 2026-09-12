@@ -15,7 +15,7 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 .skip-link:focus { top: 12px; }
 .site-header { position: sticky; top: 0; z-index: 2; background: #fffdfb; border-bottom: 1px solid #eceee8; }
 h1, #search, #results-title { scroll-margin-top: 110px; }
-h1[tabindex="-1"]:focus { outline: none; }
+h1[tabindex="-1"]:focus, #results-title:focus { outline: none; }
 .header-inner { max-width: 1376px; margin: auto; min-height: 80px; padding: 20px 48px; display: flex; align-items: center; gap: 24px; }
 .wordmark { font-size: 23px; font-weight: 700; letter-spacing: -1px; text-decoration: none; color: var(--ink); white-space: nowrap; }
 .wordmark span { color: var(--forest); }
@@ -31,9 +31,9 @@ h1 { color: var(--forest); font-size: clamp(36px, 4vw, 54px); line-height: 1.13;
 .hero p { margin: 0; color: #33584c; font-size: 19px; line-height: 1.5; }
 .gold-rule { display: block; height: 4px; width: 45px; background: var(--gold); margin-top: 24px; }
 .search-bar { display: flex; align-items: center; gap: 16px; background: var(--surface); border: 1px solid #cbd8d2; border-radius: 9px; padding: 5px; box-shadow: 0 2px 4px #163e2710; }
-.search-bar:focus-within { border-color: var(--forest); box-shadow: 0 0 0 3px #154c3b12; }
+.search-bar:focus-within { border-color: var(--forest); outline: 2px solid var(--forest); outline-offset: 3px; }
 .search-icon { color: var(--muted); margin-left: 18px; width: 23px; height: 23px; }
-.search-bar input { width: 100%; min-width: 0; border: 0; background: transparent; padding: 15px 0; font-size: 16px; color: var(--ink); outline-offset: -2px; }
+.search-bar input { width: 100%; min-width: 0; border: 0; background: transparent; padding: 15px 0; font-size: 16px; color: var(--ink); outline: none; }
 input::placeholder { color: #617276; opacity: 1; }
 .primary { background: var(--forest); border: 1px solid var(--forest); color: white; font-size: 15px; font-weight: 600; padding: 16px 26px; min-height: 50px; border-radius: 6px; white-space: nowrap; text-decoration: none; text-align: center; transition: background .18s, box-shadow .18s; }
 .primary:hover { background: #0e3a2d; box-shadow: 0 3px 12px #154c3b22; }

@@ -124,6 +124,30 @@
     await load({ missingMatcher: true }); equal(cards().length, 0); assert($('status').textContent.includes('Search could not load'), 'missing-matcher message');
     doc.querySelector('nav a[href="#resources"]').click(); await settle(); assert(!$('resources').hidden, 'navigation still works');
   });
+  await check('empty and whitespace submissions browse all with feedback and result focus', async () => {
+    await load();
+    $('browse-all').click();
+    for (const query of ['', '   ', '', '\t']) {
+      search(query); equal(cards().length, 18); equal(new Set(ids()).size, 18);
+      assert($('status').textContent.includes('Showing all 18 opportunities'), 'explicit browse feedback');
+      equal(doc.activeElement.id, 'results-title'); equal($('results-title').getAttribute('aria-describedby'), 'status');
+      assert(!$('search').hasAttribute('aria-invalid'), 'empty input is valid');
+    }
+  });
+  await check('empty query preserves interest-only and type-only searches', () => {
+    choose('interest', 'ai'); search(''); equal(ids(), ['csai', 'computing-research', 'business-surp']);
+    assert($('status').textContent.includes('3 matches'), 'interest feedback');
+    $('browse-all').click(); choose('type', 'internship'); search('   '); equal(cards().length, 2);
+    assert(cards().every(card => card.dataset.type === 'internship'), 'type preserved');
+    $('browse-all').click();
+  });
+  await check('input focus is drawn around the rounded search bar, not the inner field', () => {
+    $('search').focus();
+    const style = element => frame.contentWindow.getComputedStyle(element);
+    equal(style($('search')).outlineStyle, 'none');
+    equal(style(doc.querySelector('.search-bar')).outlineStyle, 'solid');
+    assert(parseFloat(style(doc.querySelector('.search-bar')).borderRadius) > 0, 'rounded focus container');
+  });
   await check('About and official resources remain visible if the app script does not load', async () => {
     await load({ missingApp: true }); assert(!$('about').hidden && !$('resources').hidden, 'static content available');
     assert($('resources').querySelector('a').href.startsWith('https://www.calpoly.edu/'), 'official link available');

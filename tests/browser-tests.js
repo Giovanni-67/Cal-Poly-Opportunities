@@ -164,6 +164,24 @@
     $('close-dialog').click(); assert(!$('opportunity-dialog').open, 'immediate close'); await settle();
   });
   await load();
+  await check('large collections load in ordered batches with no duplicates and a correct final page', async () => {
+    await load({ dataSetup: 'OPPORTUNITIES=Array.from({length:53},(_,i)=>({...OPPORTUNITIES[0],id:"sample-"+i,title:"Sample "+i}));' });
+    equal(cards().length, 24); assert(!$('load-more').hidden, 'more available');
+    const first = ids(); $('load-more').click(); equal(cards().length, 48); equal(ids().slice(0, 24), first);
+    equal(doc.activeElement.dataset.id, 'sample-24');
+    $('load-more').click(); equal(cards().length, 53); equal(new Set(ids()).size, 53);
+    equal(ids().at(-1), 'sample-52'); assert($('load-more').hidden, 'complete');
+    equal($('result-range').textContent, 'Showing 53 of 53 opportunities');
+    $('load-more').click(); equal(cards().length, 53);
+    search('Sample 52'); equal(ids(), ['sample-52']); assert($('load-more').hidden, 'filtered last entry reachable');
+    search('unknown query'); equal(cards().length, 0); equal($('result-range').textContent, '');
+    $('browse-all').click(); equal(cards().length, 24); assert(!$('load-more').hidden, 'reset pagination');
+  });
+  await check('exact page boundary hides Show more', async () => {
+    await load({ dataSetup: 'OPPORTUNITIES=Array.from({length:24},(_,i)=>({...OPPORTUNITIES[0],id:"boundary-"+i}));' });
+    equal(cards().length, 24); assert($('load-more').hidden, 'no empty extra page');
+  });
+  await load();
   document.getElementById('summary').textContent = `${passed} passed; ${failed} failed. Native keyboard, viewport, and OS reduced-motion checks are separate.`;
   document.title = `${failed ? 'FAIL' : 'PASS'} — Opportunity Matcher browser tests`;
 })();

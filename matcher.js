@@ -30,7 +30,7 @@
     return Array.isArray(data) && data.length > 0 && new Set(data.map(item => item?.id)).size === data.length && data.every(item =>
       item && ['id', 'title', 'description', 'sourceName'].every(key => typeof item[key] === 'string' && item[key].trim()) &&
       Object.hasOwn(TYPES, item.type) && safeSource(item.source) && /^\d{4}-\d{2}-\d{2}$/.test(item.reviewed) &&
-      ['tags', 'majors'].every(key => Array.isArray(item[key]) && item[key].length > 0 && item[key].every(value => typeof value === 'string' && normalize(value)))
+      ['tags', 'majors'].every(key => Array.isArray(item[key]) && (key === 'majors' || item[key].length > 0) && item[key].every(value => typeof value === 'string' && normalize(value)))
     );
   }
   function findMatches(data, { query = '', interests = [], type = 'all' } = {}) {

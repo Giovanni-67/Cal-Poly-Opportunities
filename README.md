@@ -6,13 +6,14 @@ Search by major or interest, select multiple interests, and refine by opportunit
 
 ## Current version
 
-- 18 curated entries with official Cal Poly sources reviewed September 12, 2026.
+- 419 sourced entries, including all 406 San Luis Obispo student organizations in the reviewed public Cal Poly Now snapshot. Five overlaps with the original collection are merged without duplicate cards. Sources reviewed September 12, 2026.
+- Business, Arts, Service, and Outdoors interest filters join the original six. Search suggestions reflect the collection’s major and interest tags.
 - Results appear in batches of 24 with a Show more control. Searches cover the whole collection, including cards that have not been displayed yet. General-interest clubs can have no major association.
 - Responsive green-and-gold interface, animated centered cards and background blur, expandable details, keyboard focus management, and reduced-motion support.
 - Distinct Explore, About, and Resources views with persistent navigation, shareable hash links, browser Back/Forward support, and preserved search state. Official resource links and the collection's source-review date are available in Resources.
 - Static HTML/CSS/JavaScript with no framework, installation, accounts, API keys, analytics, or runtime network requests. External links may lead to services with their own sign-in requirements.
 - Deterministic local matching with common aliases (AI, CS, CPE, EE, ME), type filters, and stable discovery ordering without duplicates.
-- Honest empty and data-error states. This is a curated starting point, not a complete directory or live vacancies feed. Internship entries link to official discovery resources, not specific open positions.
+- Honest empty and data-error states. Club coverage is a dated public SLO directory snapshot; additional programs are curated, and this is not a live vacancies feed. Internship entries link to official discovery resources, not specific open positions.
 - Submitting an empty or whitespace-only search shows all opportunities (or the selected filters' matches), announces the result count, and brings results into view. Search focus follows the rounded outer control; keyboard focus remains visible on interactive controls.
 
 ## Run and verify
@@ -22,13 +23,13 @@ Serve this folder with any static HTTP server, such as `python -m http.server 80
 Run the dependency-free automated tests with Node.js 18 or newer:
 
 ```sh
-node --test tests/matcher.test.cjs
+node --test tests/matcher.test.cjs tests/catalog.test.cjs
 node tests/check.cjs
 ```
 
 Open `http://localhost:8000/tests/browser.html` for the real-DOM browser regression suite. It tests the actual page/controller in an iframe, including malformed data and safe text rendering. Native keyboard interaction, responsive layouts, and visual fidelity also require browser review; the suite's simulated reduced-motion preference tests the JavaScript branch, not the OS setting.
 
-Data and matching rules are in `data.js` and `matcher.js`; UI behavior is in `app.js`. Read [SPEC.md](SPEC.md), [AGENTS.md](AGENTS.md), and [SOURCES.md](SOURCES.md) before changes. Verify the official page before adding or updating a record, and keep its source/review date accurate. Tags and major mappings are editorial associations. Search text and interest chips combine with AND; multiple selected interests combine with OR. Only current matches are shown; previously seen matches retain discovery order and new matches append. Browse all clears filters and resets ordering.
+Data and matching rules are in `data.js`, `club-data.js`, and `matcher.js`; UI behavior is in `app.js`. Read [SPEC.md](SPEC.md), [AGENTS.md](AGENTS.md), and [SOURCES.md](SOURCES.md) before changes. Verify the official page before adding or updating a record, and keep its source/review date accurate. Tags and major mappings are editorial associations. Search text and interest chips combine with AND; multiple selected interests combine with OR. Only current matches are shown; previously seen matches retain discovery order and new matches append. Browse all clears filters and resets ordering.
 
 The original teaching guide follows. The coastal example and shared teaching documents are preserved independently of this app; their historical test notes describe the template, not current matcher verification.
 

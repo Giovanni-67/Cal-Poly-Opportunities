@@ -7,7 +7,7 @@
   <title>Cal Poly Opportunities — Find your next opportunity</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
-  <script defer src="data.js"></script><script defer src="matcher.js"></script><script defer src="app.js"></script>
+  <script defer src="club-data.js"></script><script defer src="matcher.js"></script><script defer src="data.js"></script><script defer src="app.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#search">Skip to opportunity search</a>
@@ -41,6 +41,10 @@
           <label class="chip"><input type="checkbox" name="interest" value="research"><span>Research</span></label>
           <label class="chip"><input type="checkbox" name="interest" value="startups"><span>Startups</span></label>
           <label class="chip"><input type="checkbox" name="interest" value="hardware"><span>Hardware</span></label>
+          <label class="chip"><input type="checkbox" name="interest" value="business"><span>Business</span></label>
+          <label class="chip"><input type="checkbox" name="interest" value="arts"><span>Arts</span></label>
+          <label class="chip"><input type="checkbox" name="interest" value="service"><span>Service</span></label>
+          <label class="chip"><input type="checkbox" name="interest" value="outdoors"><span>Outdoors</span></label>
         </div></fieldset>
         <fieldset class="filter-row types"><legend>Filter by type:</legend><div class="chips">
           <label class="chip"><input type="radio" name="type" value="all" checked><span>All</span></label>
@@ -68,7 +72,7 @@
     </div>
     <section id="about" class="info-panel" data-view aria-labelledby="about-title">
       <div class="hero"><h1 id="about-title" tabindex="-1">A starting point.<br>An open door.</h1><p>Your next experience can start with a little curiosity.</p><span class="gold-rule" aria-hidden="true"></span></div>
-      <div class="about-copy"><p>An independent student project to help you explore Cal Poly. Major and interest tags are discovery guides, not restrictions on who can participate.</p><p>This is a curated collection, not every campus opportunity or a live openings feed. Check the official pages for current details.</p></div>
+      <div class="about-copy"><p>An independent student project to help you explore Cal Poly. Major and interest tags are discovery guides, not restrictions on who can participate.</p><p>Explore a snapshot of 406 San Luis Obispo student organizations from Cal Poly’s public directory, alongside additional campus programs. This is not a live openings feed. Check the official pages for current details.</p></div>
       <ol class="how-it-works">
         <li><span class="step-number" aria-hidden="true">01</span><h2>Start with you</h2><p>Search your major or an interest, select a few interest chips, or browse the whole collection.</p></li>
         <li><span class="step-number" aria-hidden="true">02</span><h2>Follow your curiosity</h2><p>Refine by opportunity type. Open a card to see why it connects to your search.</p></li>
@@ -79,7 +83,7 @@
     <section id="resources" class="info-panel" data-view aria-labelledby="resources-title">
       <div class="hero"><h1 id="resources-title" tabindex="-1">Keep exploring.</h1><p>Go a little further with official Cal Poly resources.</p><span class="gold-rule" aria-hidden="true"></span></div>
       <div class="resource-grid">
-        <a class="resource-card" href="https://www.calpoly.edu/life-at-cal-poly/clubs-and-organizations" target="_blank" rel="noopener noreferrer"><span class="resource-title">Campus clubs <svg aria-hidden="true"><use href="icons.svg#external"></use></svg></span><span>Explore student organizations beyond this curated collection.</span><span class="sr-only">(opens in a new tab)</span></a>
+        <a class="resource-card" href="https://now.calpoly.edu/organizations" target="_blank" rel="noopener noreferrer"><span class="resource-title">Campus clubs <svg aria-hidden="true"><use href="icons.svg#external"></use></svg></span><span>Check the live Cal Poly Now directory for current profiles and newly listed organizations.</span><span class="sr-only">(opens in a new tab)</span></a>
         <a class="resource-card" href="https://studentresearch.calpoly.edu/" target="_blank" rel="noopener noreferrer"><span class="resource-title">Student research <svg aria-hidden="true"><use href="icons.svg#external"></use></svg></span><span>Explore the Office of Student Research and its campus resources.</span><span class="sr-only">(opens in a new tab)</span></a>
         <a class="resource-card" href="https://careerservices.calpoly.edu/explore-services/resource-toolkit/job-search" target="_blank" rel="noopener noreferrer"><span class="resource-title">Career Services <svg aria-hidden="true"><use href="icons.svg#external"></use></svg></span><span>Find official tools for your internship and job search.</span><span class="sr-only">(opens in a new tab)</span></a>
         <a class="resource-card" href="https://github.com/Giovanni-67/Cal-Poly-Opportunities/blob/main/SOURCES.md" target="_blank" rel="noopener noreferrer"><span class="resource-title">Sources & matching notes <svg aria-hidden="true"><use href="icons.svg#external"></use></svg></span><span>See where the collection comes from and how search connections are chosen.</span><span class="sr-only">(opens in a new tab)</span></a>

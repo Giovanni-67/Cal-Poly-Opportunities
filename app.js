@@ -54,6 +54,15 @@
   let currentMatches = [];
   let shown = 0;
 
+  if (matcher.validData(globalThis.OPPORTUNITIES)) {
+    const suggestions = [...new Set(globalThis.OPPORTUNITIES.flatMap(item => [...item.majors, ...item.tags]))].sort();
+    $('search-suggestions').replaceChildren(...suggestions.map(value => {
+      const option = document.createElement('option');
+      option.value = matcher.INTERESTS[value] || value.charAt(0).toUpperCase() + value.slice(1);
+      return option;
+    }));
+  }
+
   function icon(name) {
     const allowed = ['people', 'gear', 'flask', 'bulb', 'shield', 'code', 'briefcase', 'arrow'];
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');

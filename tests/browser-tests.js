@@ -16,14 +16,18 @@
   const ids = () => cards().map(card => card.dataset.id);
   const equal = (actual, expected) => assert(JSON.stringify(actual) === JSON.stringify(expected), `${JSON.stringify(actual)} != ${JSON.stringify(expected)}`);
   const settle = () => new Promise(resolve => setTimeout(resolve, 450));
-  async function load({ missingData = false, missingMatcher = false, missingApp = false, dataSetup = '', reduced = false } = {}) {
+  async function load({ missingData = false, missingDirectory = false, missingMatcher = false, missingApp = false, fullCatalog = false, dataSetup = '', reduced = false } = {}) {
     let html = original.replace('<head>', `<head><base href="${base}">`);
     if (missingData) html = html.replace('<script defer src="data.js"></script>', '');
+    if (missingDirectory) html = html.replace('<script defer src="club-data.js"></script>', '');
     if (missingMatcher) html = html.replace('<script defer src="matcher.js"></script>', '');
     if (missingApp) html = html.replace('<script defer src="app.js"></script>', '');
     // Run fixture setup before deferred production scripts. Intercept only
     // the external input being tested; the controller and matcher are real.
-    if (dataSetup) html = html.replace('<script defer src="app.js"></script>', `<script defer src="data:text/javascript,${encodeURIComponent(dataSetup)}"></script><script defer src="app.js"></script>`);
+    // Preserve the original small regression fixture; full-catalog tests below
+    // independently exercise every production record and all result batches.
+    const setup = (fullCatalog ? '' : 'if(Array.isArray(globalThis.OPPORTUNITIES)) OPPORTUNITIES=OPPORTUNITIES.slice(0,18);') + dataSetup;
+    if (setup) html = html.replace('<script defer src="app.js"></script>', `<script defer src="data:text/javascript,${encodeURIComponent(setup)}"></script><script defer src="app.js"></script>`);
     if (reduced) html = html.replace('<head>', '<head><script>window.matchMedia=()=>({matches:true});<\/script>');
     await new Promise(resolve => { frame.onload = resolve; frame.srcdoc = html; });
     doc = frame.contentDocument;
@@ -90,7 +94,7 @@
   });
   await check('accordion reveals official link and source date, then collapses', async () => {
     $('details-toggle').click(); await settle(); equal($('details-toggle').getAttribute('aria-expanded'), 'true');
-    equal($('detail-link').href, 'https://csc.calpoly.edu/student-clubs/'); assert($('detail-source').textContent.includes('2026-09-12'), 'source date');
+    equal($('detail-link').href, 'https://now.calpoly.edu/organization/csai'); assert($('detail-source').textContent.includes('2026-09-12'), 'source date');
     assert(!$('detail-content').inert, 'link reachable'); $('details-toggle').click(); await settle(); assert($('detail-content').inert, 'link inert again');
   });
   await check('Tab and Shift+Tab wrap within the modal controls', async () => {
@@ -150,7 +154,7 @@
   });
   await check('About and official resources remain visible if the app script does not load', async () => {
     await load({ missingApp: true }); assert(!$('about').hidden && !$('resources').hidden, 'static content available');
-    assert($('resources').querySelector('a').href.startsWith('https://www.calpoly.edu/'), 'official link available');
+    assert($('resources').querySelector('a').href === 'https://now.calpoly.edu/organizations', 'official link available');
   });
   await check('unsafe source data is rejected by the real controller', async () => {
     await load({ dataSetup: 'OPPORTUNITIES[0].source="javascript:alert(1)";' }); equal(cards().length, 0); assert($('status').textContent.includes('could not be loaded'), 'unsafe source rejected');
@@ -182,6 +186,38 @@
     equal(cards().length, 24); assert($('load-more').hidden, 'no empty extra page');
   });
   await load();
+  await check('complete production catalog is reachable in order without duplicates', async () => {
+    await load({ fullCatalog: true, reduced: true });
+    const expected = frame.contentWindow.OPPORTUNITIES;
+    equal(expected.length, 419); equal(cards().length, 24);
+    for (let page = 1; page < Math.ceil(expected.length / 24); page++) $('load-more').click();
+    equal(ids(), expected.map(item => item.id)); equal(new Set(ids()).size, expected.length);
+    assert($('load-more').hidden, 'last page complete');
+    for (const card of cards()) {
+      card.click(); equal($('detail-title').textContent, card.querySelector('.card-title').textContent);
+      equal($('detail-link').href, expected.find(item => item.id === card.dataset.id).source);
+      await new Promise(resolve => {
+        $('opportunity-dialog').addEventListener('close', resolve, { once: true });
+        $('close-dialog').click();
+      });
+    }
+    search('Gamma Zeta Alpha'); assert(ids().includes('now-325048'), 'last directory entry searchable');
+    $('browse-all').click(); equal(cards().length, 24);
+    search('   '); assert($('status').textContent.includes('Found all 419'), 'blank full-catalog feedback');
+  });
+  await check('broader interests and major suggestions use real catalog data', () => {
+    for (const interest of ['business', 'arts', 'service', 'outdoors']) {
+      $('browse-all').click(); choose('interest', interest); assert(cards().length > 0, `${interest} matches`);
+    }
+    $('browse-all').click(); search('animal science'); assert(cards().length > 0, 'agriculture major matches');
+    const suggestions = [...$('search-suggestions').options].map(option => option.value.toLowerCase());
+    assert(suggestions.includes('animal science') && suggestions.includes('music') && suggestions.includes('history'), 'broader suggestions');
+    equal(new Set(suggestions).size, suggestions.length);
+  });
+  await check('missing directory fails visibly instead of silently showing a partial catalog', async () => {
+    await load({ missingDirectory: true, fullCatalog: true }); equal(cards().length, 0);
+    assert($('status').textContent.includes('could not be loaded'), 'directory failure message');
+  });
   document.getElementById('summary').textContent = `${passed} passed; ${failed} failed. Native keyboard, viewport, and OS reduced-motion checks are separate.`;
   document.title = `${failed ? 'FAIL' : 'PASS'} — Opportunity Matcher browser tests`;
 })();

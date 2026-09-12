@@ -22,4 +22,24 @@ globalThis.OPPORTUNITIES = [
   { id: 'career-fairs', title: 'Career Fairs & Employer Events', type: 'internship', icon: 'briefcase', description: 'Explore Career Services events to meet employers and learn about internships.', tags: ['internships', 'software', 'hardware', 'startups', 'research', 'design'], majors: ['business administration', 'computer science', 'mechanical engineering', 'civil engineering', 'agricultural business', 'architecture'], source: 'https://careerservices.calpoly.edu/career-fairs-schedule', sourceName: 'Cal Poly Career Services', note: 'An employer-discovery resource, not a promise of an available internship. Check the official schedule for current events.' }
 ].map(item => ({ ...item, reviewed: '2026-09-12' }));
 
+// Keep the original discoveries in place while joining their official profiles.
+// Directory IDs prevent the same organization appearing twice under different names.
+(function () {
+  const directory = typeof module !== 'undefined' ? require('./club-data.js') : globalThis.CLUB_DIRECTORY;
+  const matcher = typeof module !== 'undefined' ? require('./matcher.js') : globalThis.OpportunityMatcher;
+  const overlaps = { csai: '325114', security: '325037', hack4impact: '324986', wish: '324517', games: '325035' };
+  if (!matcher?.validData(directory) || Object.values(overlaps).some(id => !directory.some(item => item.directoryId === id))) {
+    globalThis.OPPORTUNITIES = null;
+    return;
+  }
+  const used = new Set(Object.values(overlaps));
+  globalThis.OPPORTUNITIES = [
+    ...globalThis.OPPORTUNITIES.map(item => {
+      const profile = directory.find(club => club.directoryId === overlaps[item.id]);
+      return profile ? { ...item, directoryId: profile.directoryId, directoryTitle: profile.title, source: profile.source, sourceName: profile.sourceName } : item;
+    }),
+    ...directory.filter(item => !used.has(item.directoryId))
+  ];
+})();
+
 if (typeof module !== 'undefined') module.exports = globalThis.OPPORTUNITIES;

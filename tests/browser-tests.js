@@ -16,10 +16,11 @@
   const ids = () => cards().map(card => card.dataset.id);
   const equal = (actual, expected) => assert(JSON.stringify(actual) === JSON.stringify(expected), `${JSON.stringify(actual)} != ${JSON.stringify(expected)}`);
   const settle = () => new Promise(resolve => setTimeout(resolve, 450));
-  async function load({ missingData = false, missingMatcher = false, dataSetup = '', reduced = false } = {}) {
+  async function load({ missingData = false, missingMatcher = false, missingApp = false, dataSetup = '', reduced = false } = {}) {
     let html = original.replace('<head>', `<head><base href="${base}">`);
     if (missingData) html = html.replace('<script defer src="data.js"></script>', '');
     if (missingMatcher) html = html.replace('<script defer src="matcher.js"></script>', '');
+    if (missingApp) html = html.replace('<script defer src="app.js"></script>', '');
     // Run fixture setup before deferred production scripts. Intercept only
     // the external input being tested; the controller and matcher are real.
     if (dataSetup) html = html.replace('<script defer src="app.js"></script>', `<script defer src="data:text/javascript,${encodeURIComponent(dataSetup)}"></script><script defer src="app.js"></script>`);
@@ -37,6 +38,33 @@
   }
   await load();
   await check('initial render shows all 18 sourced entries', () => { equal(cards().length, 18); assert($('status').textContent.includes('18 ways'), 'initial status'); });
+  await check('About and Resources open distinct views with active navigation and heading focus', async () => {
+    for (const view of ['about', 'resources', 'explore']) {
+      doc.querySelector(`nav a[href="#${view}"]`).click(); await settle();
+      equal([...doc.querySelectorAll('[data-view]')].filter(panel => !panel.hidden).map(panel => panel.id), [view]);
+      equal(doc.querySelector('nav [aria-current="page"]').hash, `#${view}`);
+      equal(doc.querySelectorAll('nav .active').length, 1);
+      equal(doc.activeElement.id, view === 'explore' ? 'page-title' : `${view}-title`);
+      assert(doc.title.includes(view === 'explore' ? 'Find your next' : view === 'about' ? 'About' : 'Resources'), 'view title');
+    }
+  });
+  await check('navigation preserves search and filters; logo and skip link return to Explore', async () => {
+    search('AI'); choose('type', 'research'); const previous = ids();
+    doc.querySelector('nav a[href="#about"]').click(); await settle();
+    doc.querySelector('.wordmark').click(); await settle();
+    equal($('search').value, 'AI'); equal(doc.querySelector('[name="type"]:checked').value, 'research'); equal(ids(), previous);
+    doc.querySelector('nav a[href="#resources"]').click(); await settle();
+    doc.querySelector('.skip-link').click(); await settle(); equal(doc.activeElement.id, 'search'); assert(!$('explore').hidden, 'search view visible');
+    $('browse-all').click();
+  });
+  await check('unknown hashes recover to Explore, and repeated navigation stays usable', async () => {
+    frame.contentWindow.location.hash = 'unknown'; await settle(); assert(!$('explore').hidden, 'fallback view');
+    doc.querySelector('nav a[href="#resources"]').click(); await settle();
+    doc.querySelector('nav a[href="#resources"]').click(); await settle(); equal(doc.activeElement.id, 'resources-title');
+    equal($('resources').querySelectorAll('.resource-card').length, 4);
+    equal($('resources').querySelector('time').dateTime, '2026-09-12');
+    doc.querySelector('nav a[href="#explore"]').click(); await settle();
+  });
   await check('major-first and interest-first search render distinct matches', () => {
     search('AI'); equal(ids(), ['csai', 'computing-research', 'business-surp']);
     search('psychology'); assert(ids().includes('ux'), 'psychology reaches UX'); assert(!ids().includes('csai'), 'stale AI card removed');
@@ -94,6 +122,11 @@
   });
   await check('missing matcher fails visibly', async () => {
     await load({ missingMatcher: true }); equal(cards().length, 0); assert($('status').textContent.includes('Search could not load'), 'missing-matcher message');
+    doc.querySelector('nav a[href="#resources"]').click(); await settle(); assert(!$('resources').hidden, 'navigation still works');
+  });
+  await check('About and official resources remain visible if the app script does not load', async () => {
+    await load({ missingApp: true }); assert(!$('about').hidden && !$('resources').hidden, 'static content available');
+    assert($('resources').querySelector('a').href.startsWith('https://www.calpoly.edu/'), 'official link available');
   });
   await check('unsafe source data is rejected by the real controller', async () => {
     await load({ dataSetup: 'OPPORTUNITIES[0].source="javascript:alert(1)";' }); equal(cards().length, 0); assert($('status').textContent.includes('could not be loaded'), 'unsafe source rejected');

@@ -8,6 +8,7 @@ Search by major or interest, select multiple interests, and refine by opportunit
 
 - 18 curated entries with official Cal Poly sources reviewed September 12, 2026.
 - Responsive green-and-gold interface, animated centered cards and background blur, expandable details, keyboard focus management, and reduced-motion support.
+- Distinct Explore, About, and Resources views with persistent navigation, shareable hash links, browser Back/Forward support, and preserved search state. Official resource links and the collection's source-review date are available in Resources.
 - Static HTML/CSS/JavaScript with no framework, installation, accounts, API keys, analytics, or runtime network requests. External links may lead to services with their own sign-in requirements.
 - Deterministic local matching with common aliases (AI, CS, CPE, EE, ME), type filters, and stable discovery ordering without duplicates.
 - Honest empty and data-error states. This is a curated starting point, not a complete directory or live vacancies feed. Internship entries link to official discovery resources, not specific open positions.

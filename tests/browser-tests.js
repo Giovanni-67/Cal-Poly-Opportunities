@@ -471,6 +471,36 @@
     }
     frame.style.width = '100%';
   });
+  await check('rendered editorial text, muted labels, and controls meet contrast thresholds', async () => {
+    await load({ dataSetup: "Date.now=()=>1799956800000; CareerEvents.events.forEach(e=>{ e.start=e.start.replace('2026','2027'); e.end=e.end.replace('2026','2027'); });" });
+    const css = element => frame.contentWindow.getComputedStyle(element);
+    const luminance = color => {
+      const channels = color.match(/[\d.]+/g).slice(0, 3).map(Number).map(value => {
+        const c = value / 255; return c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4;
+      });
+      return channels[0] * .2126 + channels[1] * .7152 + channels[2] * .0722;
+    };
+    const contrast = (a, b) => (Math.max(luminance(a), luminance(b)) + .05) / (Math.min(luminance(a), luminance(b)) + .05);
+    const canvas = css(doc.documentElement).backgroundColor;
+    for (const selector of ['#page-title', '.hero p', '#status', '.card-title', '.card-description', '.card-reason', '.category', '.career-date', '.career-time', '.career-location']) {
+      assert(contrast(css(doc.querySelector(selector)).color, canvas) >= 4.5, `${selector} contrast`);
+    }
+    const primary = doc.querySelector('.primary');
+    assert(contrast(css(primary).color, css(primary).backgroundColor) >= 4.5, 'primary button contrast');
+    const placeholder = frame.contentWindow.getComputedStyle($('search'), '::placeholder').color;
+    assert(contrast(placeholder, css(doc.querySelector('.search-bar')).backgroundColor) >= 4.5, 'placeholder contrast');
+    const focus = css(doc.documentElement).getPropertyValue('--gold').trim();
+    const focusRGB = `rgb(${[1, 3, 5].map(i => parseInt(focus.slice(i, i + 2), 16)).join(',')})`;
+    assert(contrast(focusRGB, canvas) >= 3, 'focus indicator contrast');
+  });
+  await check('study photograph loads with reserved space, dated attribution, and license', async () => {
+    await load(); doc.querySelector('a[href="#study"]').click(); await settle();
+    const photo = doc.querySelector('.study-photo img'); await photo.decode();
+    assert(photo.naturalWidth > 0 && photo.width > 0 && photo.height > 0, 'local photo loads');
+    assert(photo.hasAttribute('width') && photo.hasAttribute('height') && photo.loading === 'lazy', 'reserved size and deferred loading');
+    assert(photo.alt.includes('2018') && doc.querySelector('.study-photo figcaption').textContent.includes('before the renovation'), 'historical context');
+    assert(doc.querySelector('.study-photo a[href="https://creativecommons.org/licenses/by-sa/4.0/"]'), 'reuse terms available');
+  });
   document.getElementById('summary').textContent = `${passed} passed; ${failed} failed. Native keyboard, viewport, and OS reduced-motion checks are separate.`;
   document.title = `${failed ? 'FAIL' : 'PASS'} — Opportunity Matcher browser tests`;
 })();

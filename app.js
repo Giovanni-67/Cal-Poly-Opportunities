@@ -4,8 +4,8 @@
   const $ = id => document.getElementById(id);
   const views = [...document.querySelectorAll('[data-view]')];
   const navigation = [...document.querySelectorAll('nav a')];
-  const headings = { explore: 'page-title', study: 'study-title', resources: 'resources-title', bookmarks: 'bookmarks-title', about: 'about-title' };
-  const labels = { explore: 'Opportunities', study: 'Study Spots', resources: 'Campus Resources', bookmarks: 'Bookmarks', about: 'About' };
+  const headings = { explore: 'page-title', study: 'study-title', resources: 'resources-title', bookmarks: 'bookmarks-title', about: 'about-title', report: 'report-title' };
+  const labels = { explore: 'Opportunities', study: 'Study Spots', resources: 'Campus Resources', bookmarks: 'Bookmarks', about: 'About', report: 'Report bugs' };
   let uiReady = false;
   document.body.classList.add('js-navigation');
   function closeMenu() {

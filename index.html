@@ -6,8 +6,9 @@
   <meta name="description" content="Discover Cal Poly opportunities, find study spots and campus resources, and bookmark your favorites. Search by major or interest. An independent student project.">
   <title>Cal Poly Opportunities — Find your next opportunity</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=20260913">
-  <script defer src="club-data.js?v=20260913"></script><script defer src="matcher.js?v=20260913"></script><script defer src="data.js?v=20260913"></script><script defer src="discovery.js?v=20260913"></script><script defer src="bookmarks.js?v=20260913"></script><script defer src="campus-data.js?v=20260913"></script><script defer src="app.js?v=20260913"></script>
+  <link rel="stylesheet" href="style.css?v=20260913-3">
+  <script defer src="club-data.js?v=20260913-3"></script><script defer src="matcher.js?v=20260913-3"></script><script defer src="data.js?v=20260913-3"></script><script defer src="discovery.js?v=20260913-3"></script><script defer src="bookmarks.js?v=20260913-3"></script><script defer src="campus-data.js?v=20260913-3"></script><script defer src="app.js?v=20260913-3"></script>
+  <script defer src="bug-report.js?v=20260913-3"></script>
 </head>
 <body>
   <a class="skip-link" href="#search">Skip to opportunity search</a>
@@ -130,7 +131,35 @@
         <div id="bookmarks-empty" class="empty-state"><svg aria-hidden="true"><use href="icons.svg?v=20260913#bookmark"></use></svg><h3>Your next discovery belongs here.</h3><p>Tap the bookmark icon on any card to save it for later.</p><a href="#explore">Explore opportunities</a></div>
       </section>
     </section>
-    <footer class="site-footer"><p>Independent student project · Explore beyond your major.</p><a href="#about">About this project</a><a href="https://github.com/Giovanni-67/Cal-Poly-Opportunities/blob/main/SOURCES.md" target="_blank" rel="noopener noreferrer">Sources &amp; review notes <span class="sr-only">(opens in a new tab)</span></a><a href="#resources">Campus resources <svg aria-hidden="true"><use href="icons.svg?v=20260913#arrow"></use></svg></a></footer>
+    <section id="report" class="info-panel report-panel" data-view aria-labelledby="report-title">
+      <div class="hero"><span class="eyebrow">Made better together</span><h1 id="report-title" tabindex="-1">Something not working?</h1><p>Help make campus discovery better for everyone.</p><span class="gold-rule" aria-hidden="true"></span></div>
+      <div class="report-layout">
+        <section class="report-box" aria-labelledby="bug-form-title">
+          <h2 id="bug-form-title">Report a bug</h2><p class="section-note">Found a broken button, an incorrect listing, or a search that feels off? Tell me what happened.</p>
+          <form id="bug-form" action="https://formsubmit.co/gpeila@calpoly.edu" method="POST" target="_blank" rel="noopener noreferrer" aria-describedby="bug-privacy bug-status">
+            <input type="hidden" name="_subject" value="Cal Poly Opportunities — Bug report">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="site" value="https://giovanni-67.github.io/Cal-Poly-Opportunities/">
+            <div hidden><label>Leave this blank<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label></div>
+            <div class="report-fields"><div><label for="bug-name">Your name</label><input id="bug-name" name="name" autocomplete="name" required maxlength="100"></div><div><label for="bug-email">Your email</label><input id="bug-email" name="email" type="email" autocomplete="email" required maxlength="254"></div></div>
+            <label for="bug-description">What went wrong?</label><textarea id="bug-description" name="message" rows="7" required minlength="10" maxlength="5000" aria-describedby="bug-hint" placeholder="What were you trying to do? What happened instead?"></textarea>
+            <p id="bug-hint" class="small-note">Include the page or listing name, steps to reproduce it, and your device or browser if useful. 10–5,000 characters.</p>
+            <p id="bug-privacy" class="small-note">Your name, email, and report go through <a href="https://formsubmit.co/privacy.pdf" target="_blank" rel="noopener noreferrer">FormSubmit (privacy information)</a> to gpeila@calpoly.edu so I can investigate and reply. Reports are not posted on this site. Please leave out passwords and sensitive personal information.</p>
+            <div class="report-actions"><button class="primary" type="submit">Send bug report <svg aria-hidden="true"><use href="icons.svg?v=20260913#arrow"></use></svg></button><button type="reset" class="text-button">Clear form</button></div>
+            <p class="small-note">Opens FormSubmit in a new tab to finish sending and complete any spam check.</p><p id="bug-status" class="section-note" role="status" aria-live="polite"></p>
+          </form>
+          <p class="report-fallback">Trouble sending? <a href="mailto:gpeila@calpoly.edu?subject=Cal%20Poly%20Opportunities%20bug%20report">Email gpeila@calpoly.edu directly</a>.</p>
+        </section>
+        <aside class="report-faq" aria-labelledby="report-faq-title"><h2 id="report-faq-title">A few quick answers</h2>
+          <details open><summary>What should I report?</summary><p>Broken links, incorrect details, missing clubs, confusing matches, or anything that stops you using the site. Specific steps make an issue easier to reproduce.</p></details>
+          <details><summary>Why do related activities appear?</summary><p>Direct matches come first. Related activities share a topic or discovery tag and are labeled separately, so you can explore beyond the exact words you searched.</p></details>
+          <details><summary>Where are my bookmarks stored?</summary><p>In this browser on this device. Clearing site data removes them, and they do not sync between devices. If storage is unavailable, a notice explains that new saves last only for your current visit.</p></details>
+          <details><summary>Are hours and openings live?</summary><p>No. Listings are a reviewed collection with official links. Check those sources for current access, hours, availability, and application details.</p></details>
+          <details><summary>Who reads my report?</summary><p>The student maintaining this independent project. FormSubmit processes the report for email delivery. Reports are not added to the public catalog.</p></details>
+        </aside>
+      </div>
+    </section>
+    <footer class="site-footer"><p>Independent student project · Explore beyond your major.</p><a href="#about">About this project</a><a href="#report">Report bugs</a><a href="https://github.com/Giovanni-67/Cal-Poly-Opportunities/blob/main/SOURCES.md" target="_blank" rel="noopener noreferrer">Sources &amp; review notes <span class="sr-only">(opens in a new tab)</span></a><a href="#resources">Campus resources <svg aria-hidden="true"><use href="icons.svg?v=20260913#arrow"></use></svg></a></footer>
   </main>
   <p id="bookmark-feedback" class="toast" role="status" aria-live="polite"></p>
   <p id="storage-note" class="storage-note" role="status" hidden></p>

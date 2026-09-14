@@ -5,7 +5,7 @@
 (async function () {
   const frame = document.getElementById('app');
   const log = document.getElementById('checks');
-  const original = (await (await fetch('../index.html', { cache: 'no-store' })).text()).replace(/\?v=20260913/g, '');
+  const original = (await (await fetch('../index.html', { cache: 'no-store' })).text()).replace(/\?v=20260913(?:-\d+)?/g, '');
   const base = new URL('../', location.href).href;
   let doc;
   let passed = 0;
@@ -354,6 +354,42 @@
       assert($('resources').querySelector('a').href.includes('advising.calpoly.edu'), 'static resource link');
       equal(cards().length, 18);
     }
+  });
+  await check('Report bugs lives in the footer, preserves primary tabs, and FAQ details toggle', async () => {
+    await load(); doc.querySelector('.site-footer a[href="#report"]').click(); await settle();
+    assert(!$('report').hidden, 'report view'); equal(doc.activeElement.id, 'report-title'); assert(doc.title.includes('Report bugs'), 'title');
+    equal([...doc.querySelectorAll('nav a')].map(link => link.hash), ['#explore', '#study', '#resources', '#bookmarks']);
+    const faq = $('report').querySelectorAll('details')[1]; assert(!faq.open, 'collapsed'); faq.querySelector('summary').click(); assert(faq.open, 'expanded'); faq.querySelector('summary').click(); assert(!faq.open, 'collapsed again');
+  });
+  await check('bug report validates blank, whitespace, malformed email, short and excessive content without sending', () => {
+    let sent = 0; $('bug-form').addEventListener('submit', event => { if (!event.defaultPrevented) sent++; event.preventDefault(); });
+    const fill = (id, value) => { $(id).value = value; $(id).dispatchEvent(new frame.contentWindow.Event('input', { bubbles: true })); };
+    $('bug-form').requestSubmit(); equal(sent, 0); assert($('bug-status').textContent.includes('check'), 'invalid feedback');
+    fill('bug-name', '   '); fill('bug-email', 'student@example.com'); fill('bug-description', 'A clearly labeled test report.'); $('bug-form').requestSubmit(); equal(sent, 0);
+    fill('bug-name', 'Test student'); fill('bug-email', 'not-an-email'); $('bug-form').requestSubmit(); equal(sent, 0);
+    fill('bug-email', 'student@example.com'); fill('bug-description', 'short'); $('bug-form').requestSubmit(); equal(sent, 0);
+    fill('bug-description', 'x'.repeat(5001)); $('bug-form').requestSubmit(); equal(sent, 0);
+    fill('bug-name', 'x'.repeat(101)); fill('bug-description', 'A clearly labeled test report.'); $('bug-form').requestSubmit(); equal(sent, 0);
+    $('bug-form').reset(); equal($('bug-description').value, ''); equal($('bug-status').textContent, '');
+  });
+  await check('valid bug reports use the approved native POST, retain drafts, and never claim inbox delivery', async () => {
+    await load(); doc.querySelector('.site-footer a[href="#report"]').click(); await settle();
+    let payload;
+    $('bug-form').addEventListener('submit', event => { if (!event.defaultPrevented) payload = Object.fromEntries(new frame.contentWindow.FormData($('bug-form'))); event.preventDefault(); });
+    $('bug-name').value = ' Test student '; $('bug-email').value = 'student@example.com'; $('bug-description').value = ' A clearly labeled <script> test report & details. ';
+    $('bug-form').requestSubmit(); equal(payload.name, 'Test student'); equal(payload.email, 'student@example.com'); equal(payload.message, 'A clearly labeled <script> test report & details.');
+    equal($('bug-form').action, 'https://formsubmit.co/gpeila@calpoly.edu'); equal($('bug-form').method, 'post'); equal($('bug-form').target, '_blank');
+    assert(!$('bug-form').querySelector('[name="_captcha"][value="false"]'), 'provider spam protection preserved'); equal(payload._honey, '');
+    assert($('bug-status').textContent.includes('Finish sending'), 'honest handoff'); equal($('bug-description').value, payload.message);
+    assert($('bug-privacy').textContent.includes('FormSubmit') && $('bug-privacy').textContent.includes('gpeila@calpoly.edu'), 'recipient and processor disclosure');
+    assert($('report').querySelector('a[href^="mailto:gpeila@calpoly.edu"]'), 'email fallback'); equal(window.fixtureStorage.size, 0);
+    doc.querySelector('a[href="#explore"]').click(); await settle(); doc.querySelector('a[href="#report"]').click(); await settle(); equal($('bug-description').value, payload.message);
+    $('bug-form').reset(); equal($('bug-description').value, '');
+  });
+  await check('bug report remains a functional native form when app code is unavailable', async () => {
+    await load({ missingApp: true }); assert(!$('report').hidden, 'static report visible');
+    equal($('bug-form').method, 'post'); assert($('bug-name').required && $('bug-email').required && $('bug-description').required, 'native validation');
+    equal($('bug-email').type, 'email'); equal($('bug-description').maxLength, 5000); equal($('bug-form').action, 'https://formsubmit.co/gpeila@calpoly.edu');
   });
   document.getElementById('summary').textContent = `${passed} passed; ${failed} failed. Native keyboard, viewport, and OS reduced-motion checks are separate.`;
   document.title = `${failed ? 'FAIL' : 'PASS'} — Opportunity Matcher browser tests`;

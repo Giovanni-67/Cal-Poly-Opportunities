@@ -379,6 +379,7 @@
     $('bug-name').value = ' Test student '; $('bug-email').value = 'student@example.com'; $('bug-description').value = ' A clearly labeled <script> test report & details. ';
     $('bug-form').requestSubmit(); equal(payload.name, 'Test student'); equal(payload.email, 'student@example.com'); equal(payload.message, 'A clearly labeled <script> test report & details.');
     equal($('bug-form').action, 'https://formsubmit.co/gpeila@calpoly.edu'); equal($('bug-form').method, 'post'); equal($('bug-form').target, '_blank');
+    equal($('bug-form').rel, 'noopener'); // FormSubmit requires the referring website; keep opener protection without suppressing it.
     assert(!$('bug-form').querySelector('[name="_captcha"][value="false"]'), 'provider spam protection preserved'); equal(payload._honey, '');
     assert($('bug-status').textContent.includes('Finish sending'), 'honest handoff'); equal($('bug-description').value, payload.message);
     assert($('bug-privacy').textContent.includes('FormSubmit') && $('bug-privacy').textContent.includes('gpeila@calpoly.edu'), 'recipient and processor disclosure');

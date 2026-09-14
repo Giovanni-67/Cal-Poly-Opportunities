@@ -382,6 +382,7 @@
     equal($('bug-form').rel, 'noopener'); // FormSubmit requires the referring website; keep opener protection without suppressing it.
     assert(!$('bug-form').querySelector('[name="_captcha"][value="false"]'), 'provider spam protection preserved'); equal(payload._honey, '');
     equal(payload._url, 'https://giovanni-67.github.io/Cal-Poly-Opportunities/#report');
+    equal(payload._next, 'https://giovanni-67.github.io/Cal-Poly-Opportunities/#report-sent');
     assert($('bug-status').textContent.includes('Finish sending'), 'honest handoff'); equal($('bug-description').value, payload.message);
     assert($('bug-privacy').textContent.includes('FormSubmit') && $('bug-privacy').textContent.includes('gpeila@calpoly.edu'), 'recipient and processor disclosure');
     assert($('report').querySelector('a[href^="mailto:gpeila@calpoly.edu"]'), 'email fallback'); equal(window.fixtureStorage.size, 0);
@@ -392,6 +393,13 @@
     await load({ missingApp: true }); assert(!$('report').hidden, 'static report visible');
     equal($('bug-form').method, 'post'); assert($('bug-name').required && $('bug-email').required && $('bug-description').required, 'native validation');
     equal($('bug-email').type, 'email'); equal($('bug-description').maxLength, 5000); equal($('bug-form').action, 'https://formsubmit.co/gpeila@calpoly.edu');
+  });
+  await check('provider return opens the report view with an honest acknowledgement and usable navigation', async () => {
+    await load(); frame.contentWindow.location.hash = 'report-sent'; await settle();
+    assert(!$('report').hidden && !$('report-return').hidden, 'report confirmation visible'); equal(doc.activeElement.id, 'report-title');
+    assert($('report-return').textContent.includes('email delivery still depends'), 'does not claim inbox delivery');
+    doc.querySelector('a[href="#explore"]').click(); await settle(); assert($('report-return').hidden, 'notice cleared on navigation');
+    doc.querySelector('a[href="#report"]').click(); await settle(); assert(!$('report').hidden && $('report-return').hidden, 'ordinary form visit');
   });
   document.getElementById('summary').textContent = `${passed} passed; ${failed} failed. Native keyboard, viewport, and OS reduced-motion checks are separate.`;
   document.title = `${failed ? 'FAIL' : 'PASS'} — Opportunity Matcher browser tests`;

@@ -27,7 +27,8 @@
   document.addEventListener('click', event => { if (!event.target.closest('.site-header')) closeMenu(); });
   function showView(moveFocus = true) {
     const destination = location.hash.slice(1);
-    const view = Object.hasOwn(headings, destination) ? destination : 'explore';
+    const view = destination === 'report-sent' ? 'report' : Object.hasOwn(headings, destination) ? destination : 'explore';
+    $('report-return').hidden = destination !== 'report-sent';
     views.forEach(panel => { panel.hidden = panel.id !== view; });
     navigation.forEach(link => {
       const active = link.hash === `#${view}`;

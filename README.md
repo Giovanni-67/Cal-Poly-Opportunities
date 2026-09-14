@@ -194,3 +194,9 @@ After merging, check deployment and refresh the **same Pages URL** you submitted
 **The Loop:** spec → build → test → deploy → iterate.
 
 AI helped at build time. Ordinary static code runs for visitors, with no runtime model or secret API key.
+
+## Career announcements (reviewed September 14, 2026)
+
+The Opportunities view now highlights five upcoming fall career events above its results, with event/company search, type filters, Pacific dates/times, and links to event details and MustangJobs employer lists. `career-events.js` owns the curated records and time/filter functions; `career-ui.js` renders them independently of opportunity search. Ended events disappear on load, tab return, and a one-minute refresh. Missing or failed JavaScript leaves official directory links usable.
+
+This is not a live or complete recruiting feed. Company attendance requires its own official announcement. No private Outlook information is imported. Locations not publicly verified direct students to the event in MustangJobs. To update, verify dates, UTC offsets, locations and source links, then update the visible review date and run `node --test tests/*.test.cjs`, `node tests/check.cjs`, and `tests/browser.html` from the local preview.

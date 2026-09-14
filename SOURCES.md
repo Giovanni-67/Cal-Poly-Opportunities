@@ -80,3 +80,12 @@ Reviewed September 13, 2026. The 10 study spots and 14 resources in `campus-data
 | ASI Space Activity | [ASI activity page](https://www.asi.calpoly.edu/asi-current-space-activity/) | External activity indicators for selected spaces. This app has no live occupancy integration. |
 
 Related-activity groups in `discovery.js` are explicitly editorial. A swimming query may suggest water polo or sailing as another water activity, not claim those clubs offer swimming. Topic groups or shared specific tags explain each suggestion. Direct matches are excluded, type constraints remain active, and unrecognized empty searches do not invent recommendations.
+
+## Career event sources — reviewed September 14, 2026
+
+- [Student career fair schedule](https://careerservices.calpoly.edu/career-fairs-schedule): Fall Fair September 16 and 17, Inclusion Mixer September 16, Business Fair September 18, and CAFES Connections November 4, with published start/end times. The page directs locations and employer lists to MustangJobs; blank local locations mean not publicly verified, not cancelled. Do not copy the stale 2025 resume-book labels as event years.
+- [Business Career Fair](https://events.calpoly.edu/business-career-fair): September 18, 2026, 10 a.m.–2 p.m., Cal Poly Recreation Center.
+- [RoviSys recruiting schedule](https://www.rovisys.com/careers/university-recruiting-information/career-recruiting-events/): the September 2026 table specifically lists Cal Poly San Luis Obispo on September 17, 10 a.m.–3 p.m. at Fall Fair Day 2. Use that dated row, not the stale 2025 introductory paragraph. This is one publicly announced employer, not the full fair roster or a claim of open roles.
+- [MustangJobs access](https://careerservices.calpoly.edu/explore-services/mustangjobs): official route through the Cal Poly portal to employer information sessions and career fairs. The site links to these access instructions, not a fabricated direct event URL.
+
+No current public Deloitte campus visit was verified in this review. Curated entries expire at their exact end instant; all presentation uses America/Los_Angeles and the November record uses the post-DST UTC offset.

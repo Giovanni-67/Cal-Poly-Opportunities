@@ -8,9 +8,10 @@
   <meta name="description" content="Discover Cal Poly opportunities, find study spots and campus resources, and bookmark your favorites. Search by major or interest. An independent student project.">
   <title>Cal Poly Opportunities — Find your next opportunity</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=20260913-3">
+  <link rel="stylesheet" href="style.css?v=20260914-1">
+  <script defer src="career-events.js?v=20260914-1"></script>
   <script defer src="club-data.js?v=20260913-3"></script><script defer src="matcher.js?v=20260913-3"></script><script defer src="data.js?v=20260913-3"></script><script defer src="discovery.js?v=20260913-3"></script><script defer src="bookmarks.js?v=20260913-3"></script><script defer src="campus-data.js?v=20260913-3"></script><script defer src="app.js?v=20260913-6"></script>
-  <script defer src="bug-report.js?v=20260913-3"></script>
+  <script defer src="bug-report.js?v=20260913-3"></script><script defer src="career-ui.js?v=20260914-1"></script>
 </head>
 <body>
   <a class="skip-link" href="#search">Skip to opportunity search</a>
@@ -59,6 +60,19 @@
           <label class="chip"><input type="radio" name="type" value="hands-on"><span>Hands-on</span></label>
         </div></fieldset>
       </form>
+    </section>
+    <section id="career-events" class="career-section" aria-labelledby="career-title">
+      <div class="results-heading"><div><span class="eyebrow">Make the connection</span><h2 id="career-title">Upcoming career fairs &amp; company visits</h2></div><a href="https://careerservices.calpoly.edu/career-fairs-schedule">Full official schedule →</a></div>
+      <p class="section-note">Meet employers, explore internships, and put a date on your next step.</p>
+      <form id="career-form" class="career-filters" role="search" aria-label="Career events" hidden>
+        <label for="career-search">Find an event or company<input id="career-search" type="search" maxlength="200" placeholder="Try Business or RoviSys" aria-describedby="career-coverage"></label>
+        <label for="career-type">Event filter<select id="career-type" name="career-type"><option value="all">All events</option><option value="fair">Career fairs</option><option value="networking">Networking</option><option value="company">Announced companies</option></select></label>
+      </form>
+      <p id="career-status" class="section-note" role="status">See the official schedule for upcoming events.</p>
+      <ul id="career-list" class="career-grid" aria-label="Upcoming career events"></ul>
+      <button id="career-more" class="text-button" type="button" aria-expanded="false" aria-controls="career-list" hidden>Show all upcoming events</button>
+      <div class="career-directory"><div><h3>Who's coming? See the employer lists.</h3><p>Open MustangJobs through your Cal Poly portal, select the fair, and view its employers and location. Search company names there for information sessions, too.</p></div><a class="primary" href="https://careerservices.calpoly.edu/explore-services/mustangjobs">Employer lists via MustangJobs →<span class="sr-only"> (Cal Poly sign-in required)</span></a></div>
+      <p id="career-coverage" class="section-note">Public listings reviewed September 14, 2026. This is a curated collection, not a live feed or a complete company list. Some visits are shared only through MustangJobs or campus email. Confirm details before going; Cal Poly sign-in is required for MustangJobs.</p>
     </section>
     <section class="results-section" aria-labelledby="results-title">
       <div class="results-heading"><h2 id="results-title" tabindex="-1" aria-describedby="status">Opportunities to explore</h2><span class="collection-label">Curated collection <span aria-hidden="true"></span></span></div>

@@ -5,7 +5,7 @@
 (async function () {
   const frame = document.getElementById('app');
   const log = document.getElementById('checks');
-  const original = (await (await fetch('../index.html', { cache: 'no-store' })).text()).replace(/\?v=20260913(?:-\d+)?/g, '');
+  const original = (await (await fetch('../index.html', { cache: 'no-store' })).text()).replace(/\?v=\d+(?:-\d+)?/g, '');
   const base = new URL('../', location.href).href;
   let doc;
   let passed = 0;
@@ -401,6 +401,37 @@
     assert($('report-return').textContent.includes('email delivery still depends'), 'does not claim inbox delivery');
     doc.querySelector('a[href="#explore"]').click(); await settle(); assert($('report-return').hidden, 'notice cleared on navigation');
     doc.querySelector('a[href="#report"]').click(); await settle(); assert(!$('report').hidden && $('report-return').hidden, 'ordinary form visit');
+  });
+  await check('career announcements sit between filters and results, filter companies independently, and expand', async () => {
+    await load({ dataSetup: "Date.now=()=>1799956800000; CareerEvents.events.forEach(e=>{ e.start=e.start.replace('2026','2027'); e.end=e.end.replace('2026','2027'); });" });
+    assert($('search-form').compareDocumentPosition($('career-events')) & 4, 'after filters');
+    assert($('career-events').compareDocumentPosition($('results')) & 4, 'before opportunities');
+    equal($('career-list').children.length, 3);
+    $('career-more').click(); equal($('career-list').children.length, 5);
+    $('career-more').click(); equal($('career-list').children.length, 3);
+    const originalCards = ids();
+    $('career-search').value = 'RoviSys'; $('career-search').dispatchEvent(new Event('input', { bubbles: true }));
+    equal($('career-list').children.length, 1); assert($('career-list').textContent.includes('Day 2'), 'verified employer matches correct fair day'); equal(ids(), originalCards);
+    $('career-type').value = 'networking'; $('career-type').dispatchEvent(new Event('input', { bubbles: true }));
+    equal($('career-list').children.length, 0); assert($('career-status').textContent.includes('does not mean'), 'honest empty state');
+    $('career-search').value = ''; $('career-type').value = 'all'; $('career-form').requestSubmit(); equal($('career-list').children.length, 3);
+    $('career-more').click(); assert($('career-list').textContent.includes('Cal Poly Recreation Center'), 'verified location');
+    assert($('career-list').textContent.includes('Location: check'), 'unverified locations marked');
+    const sourceLink = $('career-list').querySelector('a'); sourceLink.focus();
+    doc.dispatchEvent(new Event('visibilitychange')); assert(doc.activeElement === sourceLink, 'refresh preserves link focus');
+    for (const width of [375, 1280]) {
+      frame.style.width = width + 'px'; await settle();
+      const section = $('career-events').getBoundingClientRect();
+      assert(section.right <= doc.documentElement.clientWidth + 1, 'section fits viewport');
+      assert($('career-list').scrollWidth <= $('career-list').clientWidth + 1, 'cards do not overflow');
+    }
+    frame.style.width = '100%';
+  });
+  await check('expired career collection retains useful official links', async () => {
+    await load({ dataSetup: 'Date.now=()=>1893456000000;' });
+    equal($('career-list').children.length, 0);
+    assert($('career-status').textContent.includes('No upcoming'), 'expired snapshot is honest');
+    assert($('career-events').querySelector('a[href="https://careerservices.calpoly.edu/explore-services/mustangjobs"]'), 'directory still usable');
   });
   document.getElementById('summary').textContent = `${passed} passed; ${failed} failed. Native keyboard, viewport, and OS reduced-motion checks are separate.`;
   document.title = `${failed ? 'FAIL' : 'PASS'} — Opportunity Matcher browser tests`;

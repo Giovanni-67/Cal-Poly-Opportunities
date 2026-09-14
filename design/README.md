@@ -2,6 +2,14 @@
 
 Status: direction approved September 14, 2026; visual mockup pending review. The user asked to see the proposed desktop and mobile design before the live interface changes.
 
+## Visual proposal
+
+![Desktop and mobile campus guide proposal](campus-guide-desktop-mobile.png)
+
+This generated image is a composition study, not a functional page or a new factual source. It demonstrates editorial headings, a compact agenda, and restrained opportunity listings. It abbreviates the collection and controls for review: implementation must retain every existing interest choice, company/event search, event filters, source/review disclosures, all dated records, pagination, and bookmark behavior. The pictured fair dates refer to 2026; production must continue to display years and expire ended events. Event times must come from `career-events.js`, not image text. No extra header search action is needed because the main search already serves that purpose.
+
+The image uses no real or generated campus photography. Study Spots imagery will require separate sourcing and reuse checks. Functional, contrast, responsive and keyboard verification will apply to the eventual HTML implementation; an image does not prove those behaviors.
+
 ## Direction
 
 Make the site feel like a practical Cal Poly student guide with editorial typography, compact information, restrained green and gold, and fewer decorative containers. Keep search the main task. Proposed headline: "Find clubs, projects, and career events at Cal Poly."

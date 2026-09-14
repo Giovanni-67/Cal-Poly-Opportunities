@@ -378,7 +378,8 @@
     $('bug-form').addEventListener('submit', event => { if (!event.defaultPrevented) payload = Object.fromEntries(new frame.contentWindow.FormData($('bug-form'))); event.preventDefault(); });
     $('bug-name').value = ' Test student '; $('bug-email').value = 'student@example.com'; $('bug-description').value = ' A clearly labeled <script> test report & details. ';
     $('bug-form').requestSubmit(); equal(payload.name, 'Test student'); equal(payload.email, 'student@example.com'); equal(payload.message, 'A clearly labeled <script> test report & details.');
-    equal($('bug-form').action, 'https://formsubmit.co/gpeila@calpoly.edu'); equal($('bug-form').method, 'post'); equal($('bug-form').target, '_blank');
+    equal($('bug-form').action, 'https://formsubmit.co/349ae6b42405291765c7062777df5d93'); equal($('bug-form').method, 'post'); equal($('bug-form').target, '_blank');
+    equal(doc.querySelector('meta[name="referrer"]').content, 'no-referrer-when-downgrade');
     equal($('bug-form').rel, 'noopener'); // FormSubmit requires the referring website; keep opener protection without suppressing it.
     assert(!$('bug-form').querySelector('[name="_captcha"][value="false"]'), 'provider spam protection preserved'); equal(payload._honey, '');
     equal(payload._url, 'https://giovanni-67.github.io/Cal-Poly-Opportunities/#report');
@@ -392,7 +393,7 @@
   await check('bug report remains a functional native form when app code is unavailable', async () => {
     await load({ missingApp: true }); assert(!$('report').hidden, 'static report visible');
     equal($('bug-form').method, 'post'); assert($('bug-name').required && $('bug-email').required && $('bug-description').required, 'native validation');
-    equal($('bug-email').type, 'email'); equal($('bug-description').maxLength, 5000); equal($('bug-form').action, 'https://formsubmit.co/gpeila@calpoly.edu');
+    equal($('bug-email').type, 'email'); equal($('bug-description').maxLength, 5000); equal($('bug-form').action, 'https://formsubmit.co/349ae6b42405291765c7062777df5d93');
   });
   await check('provider return opens the report view with an honest acknowledgement and usable navigation', async () => {
     await load(); frame.contentWindow.location.hash = 'report-sent'; await settle();

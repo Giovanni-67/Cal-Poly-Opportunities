@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <!-- FormSubmit fallback uses Referer; include the public project path, never HTTPS-to-HTTP. -->
+  <meta name="referrer" content="no-referrer-when-downgrade">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Discover Cal Poly opportunities, find study spots and campus resources, and bookmark your favorites. Search by major or interest. An independent student project.">
   <title>Cal Poly Opportunities — Find your next opportunity</title>
@@ -137,7 +139,7 @@
       <div class="report-layout">
         <section class="report-box" aria-labelledby="bug-form-title">
           <h2 id="bug-form-title">Report a bug</h2><p class="section-note">Found a broken button, an incorrect listing, or a search that feels off? Tell me what happened.</p>
-          <form id="bug-form" action="https://formsubmit.co/gpeila@calpoly.edu" method="POST" target="_blank" rel="noopener" aria-describedby="bug-privacy bug-status">
+          <form id="bug-form" action="https://formsubmit.co/349ae6b42405291765c7062777df5d93" method="POST" target="_blank" rel="noopener" aria-describedby="bug-privacy bug-status">
             <input type="hidden" name="_subject" value="Cal Poly Opportunities — Bug report">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_url" value="https://giovanni-67.github.io/Cal-Poly-Opportunities/#report">

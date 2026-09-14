@@ -27,6 +27,9 @@
         (url.hostname === 'calpoly.edu' || url.hostname.endsWith('.calpoly.edu'));
     } catch { return false; }
   }
+  function activityText(value) {
+    return normalize(value).replace(/\b(swimming|swimmer|swimmers)\b/g, 'swim');
+  }
   function validData(data) {
     return Array.isArray(data) && data.length > 0 && new Set(data.map(item => item?.id)).size === data.length && data.every(item =>
       item && ['id', 'title', 'description', 'sourceName'].every(key => typeof item[key] === 'string' && item[key].trim()) &&
@@ -40,9 +43,9 @@
       return { error: 'Please use a search of up to 200 characters and the available filters.', matches: [] };
     }
     const raw = normalize(query);
-    const term = Object.hasOwn(ALIASES, raw) ? ALIASES[raw] : raw;
+    const term = activityText(Object.hasOwn(ALIASES, raw) ? ALIASES[raw] : raw);
     // Match whole words: "AI" must not match "fair" or "chair".
-    const contains = (text, word) => ` ${normalize(text)} `.includes(` ${word} `);
+    const contains = (text, word) => ` ${activityText(text)} `.includes(` ${word} `);
     const matches = [];
     for (const item of data) {
       if (type !== 'all' && item.type !== type) continue;

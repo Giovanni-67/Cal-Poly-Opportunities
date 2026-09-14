@@ -10,8 +10,12 @@ Search by major or interest, select multiple interests, and refine by opportunit
 - Business, Arts, Service, and Outdoors interest filters join the original six. Search suggestions reflect the collection’s major and interest tags.
 - Results appear in batches of 24 with a Show more control. Searches cover the whole collection, including cards that have not been displayed yet. General-interest clubs can have no major association.
 - Responsive green-and-gold interface, animated centered cards and background blur, expandable details, keyboard focus management, and reduced-motion support.
-- Distinct Explore, About, and Resources views with persistent navigation, shareable hash links, browser Back/Forward support, and preserved search state. Official resource links and the collection's source-review date are available in Resources.
-- Static HTML/CSS/JavaScript with no framework, installation, accounts, API keys, analytics, or runtime network requests. External links may lead to services with their own sign-in requirements.
+- Four primary tabs in order: Opportunities, Study Spots, Campus Resources, and Bookmarks. About stays in the footer. Desktop tabs become a keyboard-accessible mobile menu, with hash links, Back/Forward support, and preserved search state.
+- 10 study spots with source-backed feature filters, locations, and access notes; 14 campus resources spanning learning, making, technology, careers, support, research, and recreation. Reviewed September 13, 2026; seats, noise, equipment, and hours are not live.
+- Related activities appear separately after direct matches, with explicit topic or shared-tag explanations. Swimming directly finds Swim and Triathlon while suggesting other water activities. Connections cover diverse interests and respect opportunity type filters.
+- Bookmark any opportunity, study spot, or resource using its icon or detail dialog. Search and filter saved items. Bookmarks stay in this browser using localStorage, without accounts or cross-device sync; blocked, corrupt, or full storage produces a visible session-only warning.
+- Static HTML/CSS/JavaScript with no framework, installation, accounts, API keys, or analytics. Discovery and bookmarks run locally. The explicitly approved bug-report form sends a visitor's name, email, and report to FormSubmit for delivery to gpeila@calpoly.edu; other external links may lead to services with their own sign-in requirements.
+- Report bugs from the footer: a form with native validation and a short FAQ inspired by Polyratings' green headings and gold dividers. FormSubmit opens in a separate tab for its delivery confirmation and spam checks. The original draft stays on the page; there is a direct email fallback. Submitting is never labeled as confirmed inbox delivery by this app.
 - Deterministic local matching with common aliases (AI, CS, CPE, EE, ME), type filters, and stable discovery ordering without duplicates.
 - Honest empty and data-error states. Club coverage is a dated public SLO directory snapshot; additional programs are curated, and this is not a live vacancies feed. Internship entries link to official discovery resources, not specific open positions.
 - Submitting an empty or whitespace-only search shows all opportunities (or the selected filters' matches), announces the result count, and brings results into view. Search focus follows the rounded outer control; keyboard focus remains visible on interactive controls.
@@ -23,15 +27,19 @@ Serve this folder with any static HTTP server, such as `python -m http.server 80
 Run the dependency-free automated tests with Node.js 18 or newer:
 
 ```sh
-node --test tests/matcher.test.cjs tests/catalog.test.cjs
+node --test tests/matcher.test.cjs tests/catalog.test.cjs tests/discovery.test.cjs tests/campus.test.cjs
 node tests/check.cjs
 ```
 
 Open `http://localhost:8000/tests/browser.html` for the real-DOM browser regression suite. It tests the actual page/controller in an iframe, including malformed data and safe text rendering. Native keyboard interaction, responsive layouts, and visual fidelity also require browser review; the suite's simulated reduced-motion preference tests the JavaScript branch, not the OS setting.
 
-Data and matching rules are in `data.js`, `club-data.js`, and `matcher.js`; UI behavior is in `app.js`. Read [SPEC.md](SPEC.md), [AGENTS.md](AGENTS.md), and [SOURCES.md](SOURCES.md) before changes. Verify the official page before adding or updating a record, and keep its source/review date accurate. Tags and major mappings are editorial associations. Search text and interest chips combine with AND; multiple selected interests combine with OR. Only current matches are shown; previously seen matches retain discovery order and new matches append. Browse all clears filters and resets ordering.
+Data and matching rules are in `data.js`, `club-data.js`, `campus-data.js`, `matcher.js`, and `discovery.js`; local bookmark persistence is in `bookmarks.js`; UI behavior is in `app.js`. Read [SPEC.md](SPEC.md), [AGENTS.md](AGENTS.md), and [SOURCES.md](SOURCES.md) before changes. Verify the official page before adding or updating a record, and keep its source/review date accurate. Tags, major mappings, and related-topic groups are editorial associations. Related matches never replace or duplicate direct matches. Study/resource filters require all selected features; bookmark type filters preserve the saved collection. Browser tests use isolated storage and never clear a visitor’s real bookmarks. Search text and interest chips combine with AND; multiple selected interests combine with OR. Only current matches are shown; previously seen matches retain discovery order and new matches append. Browse all clears filters and resets ordering.
 
 The original teaching guide follows. The coastal example and shared teaching documents are preserved independently of this app; their historical test notes describe the template, not current matcher verification.
+
+### Bug-report delivery setup
+
+The user approved FormSubmit on September 13, 2026. Its first submission triggers an activation email to gpeila@calpoly.edu. The mailbox owner must confirm that email before delivery can be relied on, then send a clearly labeled test report from the deployed site and verify receipt. No mailbox credentials belong in this repository. Keep the provider's default CAPTCHA enabled and the honeypot field in place. Browser tests intercept the native form submission and inspect its payload without sending reports. They verify local behavior, not inbox delivery or provider availability. FormSubmit processes reports under its [privacy terms](https://formsubmit.co/privacy.pdf); its [documentation](https://formsubmit.co/documentation) describes activation and spam controls. The user-facing form discloses the recipient and processor. No report contents are stored in this repository or in localStorage.
 
 ---
 

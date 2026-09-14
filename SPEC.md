@@ -16,3 +16,18 @@ The coastal example has a [completed TARGET](examples/coast/SPEC.md). It demonst
 The student confirmed the starter was live and successfully submitted to the club portal, approved the standing rule and visual concept, and authorized implementation plus meaningful tested commits, pushes, and merges on September 12, 2026. Build branch: `build/opportunity-matcher`. Preserve the template example, shared teaching documentation, and publishing configuration.
 
 Following the student’s approved expansion, club coverage includes the 406 San Luis Obispo student organizations in the public Cal Poly Now directory snapshot reviewed September 12, 2026. Additional programs remain curated; this is not a live openings feed or a claim to include private, unlisted, or future organizations. Official external pages may have their own sign-in or participation requirements; discovery in this app requires neither. Matching tags and major associations are editorial, not admissions criteria. New searches show current matches, retaining the discovery order of previously seen cards and appending new ones; Browse all resets discovery ordering.
+
+
+## Approved campus discovery expansion — September 13, 2026
+
+The student approved implementing related activities, study spots, expanded campus resources, and bookmarks. Keep the existing single-page design and discovery-first interaction. Primary navigation is Opportunities, Study Spots, Campus Resources, then Bookmarks; use visible desktop tabs and a compact mobile menu. Move About to the footer. Build Experience remains deferred.
+
+Show direct opportunity matches first and related activities separately, explaining the topic or shared discovery tag without implying the activity itself is the searched activity. Preserve type filters, stable result ordering, unrestricted browsing, and official-source requirements. Related connections span interests beyond water activities.
+
+Study spots and resources use a curated local dataset with source dates, search, category or feature filters, and the existing accessible expanding card. Publish only verified location and feature claims. Do not imply live seats, noise, availability, opening hours, or current vacancies.
+
+Save all three item kinds with independent bookmark icon buttons and a searchable Bookmarks view. Use local browser storage, no accounts or device sync. Disclose storage limits and show honest session-only feedback on blocked, corrupt, or full storage. Test persistence, repeated toggles, filtering, pagination, unique accessible IDs, keyboard focus after removal, navigation, and data failures alongside existing regressions. The previously approved static architecture, example preservation, and meaningful tested commit/push workflow remain in force.
+
+## Approved bug reporting — September 13, 2026
+
+The student requested a Report bugs destination with name, email, and bug-description fields, using the Polyratings FAQ as visual inspiration. Keep the four primary tabs; put Report bugs in the footer with a compact FAQ. The student explicitly chose FormSubmit and agreed to confirm its activation email. This is a scoped exception to the no-external-service guardrail for voluntary report submission only: FormSubmit processes those fields and delivers them to gpeila@calpoly.edu. Discovery and bookmarks remain fully local. Disclose the processor and recipient, preserve default provider spam checks, validate required fields and lengths, retain the draft if sending is interrupted, and provide a direct email fallback. Do not claim inbox delivery without verification or store submitted reports in the catalog, repository, or localStorage.

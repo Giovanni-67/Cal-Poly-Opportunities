@@ -16,3 +16,14 @@ The coastal example has a [completed TARGET](examples/coast/SPEC.md). It demonst
 The student confirmed the starter was live and successfully submitted to the club portal, approved the standing rule and visual concept, and authorized implementation plus meaningful tested commits, pushes, and merges on September 12, 2026. Build branch: `build/opportunity-matcher`. Preserve the template example, shared teaching documentation, and publishing configuration.
 
 Following the student’s approved expansion, club coverage includes the 406 San Luis Obispo student organizations in the public Cal Poly Now directory snapshot reviewed September 12, 2026. Additional programs remain curated; this is not a live openings feed or a claim to include private, unlisted, or future organizations. Official external pages may have their own sign-in or participation requirements; discovery in this app requires neither. Matching tags and major associations are editorial, not admissions criteria. New searches show current matches, retaining the discovery order of previously seen cards and appending new ones; Browse all resets discovery ordering.
+
+
+## Approved campus discovery expansion — September 13, 2026
+
+The student approved implementing related activities, study spots, expanded campus resources, and bookmarks. Keep the existing single-page design and discovery-first interaction. Primary navigation is Opportunities, Study Spots, Campus Resources, then Bookmarks; use visible desktop tabs and a compact mobile menu. Move About to the footer. Build Experience remains deferred.
+
+Show direct opportunity matches first and related activities separately, explaining the topic or shared discovery tag without implying the activity itself is the searched activity. Preserve type filters, stable result ordering, unrestricted browsing, and official-source requirements. Related connections span interests beyond water activities.
+
+Study spots and resources use a curated local dataset with source dates, search, category or feature filters, and the existing accessible expanding card. Publish only verified location and feature claims. Do not imply live seats, noise, availability, opening hours, or current vacancies.
+
+Save all three item kinds with independent bookmark icon buttons and a searchable Bookmarks view. Use local browser storage, no accounts or device sync. Disclose storage limits and show honest session-only feedback on blocked, corrupt, or full storage. Test persistence, repeated toggles, filtering, pagination, unique accessible IDs, keyboard focus after removal, navigation, and data failures alongside existing regressions. The previously approved static architecture, example preservation, and meaningful tested commit/push workflow remain in force.

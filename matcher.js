@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  const TYPES = { club: 'Club', research: 'Research', internship: 'Internship', competition: 'Competition', startup: 'Startup', 'hands-on': 'Hands-on' };
+  const TYPES = { club: 'Club', research: 'Research', internship: 'Internship', competition: 'Competition', startup: 'Startup', 'hands-on': 'Hands-on', study: 'Study spot', resource: 'Resource' };
   const INTERESTS = { ai: 'AI', software: 'Software', cybersecurity: 'Cybersecurity', research: 'Research', startups: 'Startups', hardware: 'Hardware', business: 'Business', arts: 'Arts', service: 'Service', outdoors: 'Outdoors' };
   const ALIASES = {
     ai: 'ai', 'artificial intelligence': 'ai', 'machine learning': 'ai', ml: 'ai',

@@ -2,6 +2,7 @@
 
 (function () {
   const matcher = typeof module !== 'undefined' ? require('./matcher.js') : globalThis.OpportunityMatcher;
+  if (!matcher) return;
   // Editorial connections, not claims that one activity includes another.
   const groups = [
     ['water activities', 'swim|swimming|swimmers|water polo|sailing|surfing|surf|kayaking|paddling|rowing|dragon boating|triathlon'],

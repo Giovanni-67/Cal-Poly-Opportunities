@@ -52,3 +52,31 @@ Program sources were reviewed through web research; club summaries and URLs were
 For broader exploration, [Cal Poly clubs and organizations](https://www.calpoly.edu/life-at-cal-poly/clubs-and-organizations) links to the university's campus organization resources.
 
 To refresh club coverage, repeat the public directory pagination and campus/branch checks, review changed descriptions and links, preserve stable IDs, update the documented counts and test ID fingerprint, and run both automated and browser suites. Do not change review dates without a new source review.
+
+
+## Campus study spots and resources
+
+Reviewed September 13, 2026. The 10 study spots and 14 resources in `campus-data.js` are a separate curated collection, not additions to the 429 opportunity count. Summaries are original paraphrases. These are discovery descriptions, not live opening hours, room bookings, occupancy, equipment inventory, or guarantees of access. Study filters use AND, so every selected feature must be present.
+
+| Entries | Official source | Facts used and limits |
+| --- | --- | --- |
+| Kennedy Library | [Library](https://library.calpoly.edu/) | Quiet or collaborative study spaces. No quiet-floor claim. |
+| Student Fishbowls, DSS 115C, Hub24 | [Study and meeting spaces](https://library.calpoly.edu/visit/study-and-meeting-spaces) | Student fishbowls on level 2 with monitors; student reservations for 115C; Hub24 on levels 1 and 2 with workstations and laptop monitors. Active PolyCard required after hours. 115D is not presented as student-bookable. |
+| Library Courtyard | [Refreshed Kennedy Library, January 2026](https://www.calpoly.edu/news/light-spacious-and-bustling-take-look-inside-refreshed-kennedy-library) | Redesigned level 1 courtyard following reopening; outdoor setting, no guaranteed seats or noise level. |
+| Chandler and San Luis Study Lounges, UU Plaza, UU Common Areas | [University Union](https://www.asi.calpoly.edu/facilities/university-union/) | Named study lounges, outdoor plaza, open common seating, Wi-Fi and charging stations. Power tag applies only to common-area building amenities; no outlet-at-every-seat claim. Lounges are not tagged quiet without current evidence. |
+| The Lounge at the UU | [ASI announcement](https://www.asi.calpoly.edu/asi-now/press-releases/discover-the-lounge-at-the-university-union/) | Room 119 recreational study/social setting; not a silent-study room. |
+| Tutoring | [Writing and Learning](https://writingandlearning.calpoly.edu/tutoring) | Course, writing, exam preparation and study-skills help. |
+| Academic Advising | [Academic Advising](https://advising.calpoly.edu/) | Advising centers, course planning and registration guidance. |
+| Mustang Makerspace | [CENG makerspace announcement](https://ceng.calpoly.edu/connection/2025/09/new-mustang-makerspace-open-to-all-students/) | Bonderson Building 197, 3D printing, laser cutting and sewing; laser certification required. Historical hours are not copied. |
+| Craft Center | [ASI Craft Center](https://www.asi.calpoly.edu/experience/craft-center/) | Creative classes and studio passes; fees/registration may apply. |
+| Tech Rental & Printing; Library Borrowing | [Checkout and requests](https://library.calpoly.edu/services/checkout-and-requests) | Official route to tech services, borrowing, reserves and interlibrary requests. No claim about particular rentable devices or stock. |
+| Digital Scholarship Studio | [Digital Scholarship Studio](https://library.calpoly.edu/research/digital-scholarship-studio) | First-floor research help, digital-project consultations and peer assistance. Separate from the 115C study-room entry because the visitor intent differs. |
+| Career Services | [Career Services](https://careerservices.calpoly.edu/) | Career guidance, employer connections and job-search resources; not verified vacancies. |
+| Basic Needs Support | [Basic Needs](https://basicneeds.calpoly.edu/) | Food, housing and financial-wellness support routes. |
+| Disability Resource Center | [DRC](https://drc.calpoly.edu/) | Accessibility services and accommodation requests. |
+| Let’s Talk | [Let’s Talk](https://chw.calpoly.edu/counseling/lets-talk) | Informal drop-in consultations; official schedule and distinction from ongoing counseling. |
+| Research help | [Office of Student Research](https://studentresearch.calpoly.edu/) | Getting-started resources and advising. |
+| Outdoor Rentals | [ASI fall 2026 guide](https://www.asi.calpoly.edu/asi-now/asi-blog/plan-your-fall-2026-semester-with-asi/) | Rental-center route and example gear including tents, coolers and kayaks. Check current rates and availability. |
+| ASI Space Activity | [ASI activity page](https://www.asi.calpoly.edu/asi-current-space-activity/) | External activity indicators for selected spaces. This app has no live occupancy integration. |
+
+Related-activity groups in `discovery.js` are explicitly editorial. A swimming query may suggest water polo or sailing as another water activity, not claim those clubs offer swimming. Topic groups or shared specific tags explain each suggestion. Direct matches are excluded, type constraints remain active, and unrecognized empty searches do not invent recommendations.

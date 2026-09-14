@@ -5,19 +5,22 @@
 (async function () {
   const frame = document.getElementById('app');
   const log = document.getElementById('checks');
-  const original = await (await fetch('../index.html')).text();
+  const original = (await (await fetch('../index.html', { cache: 'no-store' })).text()).replace(/\?v=20260913/g, '');
   const base = new URL('../', location.href).href;
   let doc;
   let passed = 0;
   let failed = 0;
   function assert(value, message) { if (!value) throw new Error(message); }
   const $ = id => doc.getElementById(id);
-  const cards = () => [...doc.querySelectorAll('.opportunity-card')];
+  const cards = () => [...doc.querySelectorAll('#results .opportunity-card')];
   const ids = () => cards().map(card => card.dataset.id);
   const equal = (actual, expected) => assert(JSON.stringify(actual) === JSON.stringify(expected), `${JSON.stringify(actual)} != ${JSON.stringify(expected)}`);
   const settle = () => new Promise(resolve => setTimeout(resolve, 450));
-  async function load({ missingData = false, missingDirectory = false, missingMatcher = false, missingApp = false, fullCatalog = false, dataSetup = '', reduced = false } = {}) {
+  async function load({ missingData = false, missingDirectory = false, missingMatcher = false, missingApp = false, fullCatalog = false, dataSetup = '', reduced = false, keepStorage = false, storageMode = '', missingCampus = false } = {}) {
+    if (!keepStorage) window.fixtureStorage = new Map();
+    window.fixtureStorageMode = storageMode;
     let html = original.replace('<head>', `<head><base href="${base}">`);
+    if (missingCampus) html = html.replace('<script defer src="campus-data.js"></script>', '');
     if (missingData) html = html.replace('<script defer src="data.js"></script>', '');
     if (missingDirectory) html = html.replace('<script defer src="club-data.js"></script>', '');
     if (missingMatcher) html = html.replace('<script defer src="matcher.js"></script>', '');
@@ -26,9 +29,11 @@
     // the external input being tested; the controller and matcher are real.
     // Preserve the original small regression fixture; full-catalog tests below
     // independently exercise every production record and all result batches.
-    const setup = (fullCatalog ? '' : 'if(Array.isArray(globalThis.OPPORTUNITIES)) OPPORTUNITIES=OPPORTUNITIES.slice(0,18);') + dataSetup;
+    const storageSetup = `Object.defineProperty(window,'localStorage',{value:{getItem(key){if(parent.fixtureStorageMode==='blocked')throw Error('Blocked');return parent.fixtureStorage.get(key)??null;},setItem(key,value){if(parent.fixtureStorageMode==='quota')throw Error('Quota');parent.fixtureStorage.set(key,value);}}});`;
+    const setup = storageSetup + (fullCatalog ? '' : 'if(Array.isArray(globalThis.OPPORTUNITIES)) OPPORTUNITIES=OPPORTUNITIES.slice(0,18);') + dataSetup;
     if (setup) html = html.replace('<script defer src="app.js"></script>', `<script defer src="data:text/javascript,${encodeURIComponent(setup)}"></script><script defer src="app.js"></script>`);
     if (reduced) html = html.replace('<head>', '<head><script>window.matchMedia=()=>({matches:true});<\/script>');
+    html = html.replace(/(src|href)="([\w-]+\.(?:js|css))"/g, (_, attribute, file) => `${attribute}="${file}?test=${Date.now()}"`);
     await new Promise(resolve => { frame.onload = resolve; frame.srcdoc = html; });
     doc = frame.contentDocument;
   }
@@ -43,18 +48,18 @@
   await load();
   await check('initial render shows all 18 sourced entries', () => { equal(cards().length, 18); assert($('status').textContent.includes('18 ways'), 'initial status'); });
   await check('About and Resources open distinct views with active navigation and heading focus', async () => {
-    for (const view of ['about', 'resources', 'explore']) {
-      doc.querySelector(`nav a[href="#${view}"]`).click(); await settle();
+    for (const view of ['study', 'resources', 'bookmarks', 'about', 'explore']) {
+      doc.querySelector(`a[href="#${view}"]`).click(); await settle();
       equal([...doc.querySelectorAll('[data-view]')].filter(panel => !panel.hidden).map(panel => panel.id), [view]);
-      equal(doc.querySelector('nav [aria-current="page"]').hash, `#${view}`);
-      equal(doc.querySelectorAll('nav .active').length, 1);
+      equal(doc.querySelector('nav [aria-current="page"]')?.hash || null, view === 'about' ? null : `#${view}`);
+      equal(doc.querySelectorAll('nav .active').length, view === 'about' ? 0 : 1);
       equal(doc.activeElement.id, view === 'explore' ? 'page-title' : `${view}-title`);
-      assert(doc.title.includes(view === 'explore' ? 'Find your next' : view === 'about' ? 'About' : 'Resources'), 'view title');
+      assert(doc.title.includes(view === 'explore' ? 'Find your next' : view.charAt(0).toUpperCase() + view.slice(1)), 'view title');
     }
   });
   await check('navigation preserves search and filters; logo and skip link return to Explore', async () => {
     search('AI'); choose('type', 'research'); const previous = ids();
-    doc.querySelector('nav a[href="#about"]').click(); await settle();
+    doc.querySelector('a[href="#about"]').click(); await settle();
     doc.querySelector('.wordmark').click(); await settle();
     equal($('search').value, 'AI'); equal(doc.querySelector('[name="type"]:checked').value, 'research'); equal(ids(), previous);
     doc.querySelector('nav a[href="#resources"]').click(); await settle();
@@ -65,8 +70,8 @@
     frame.contentWindow.location.hash = 'unknown'; await settle(); assert(!$('explore').hidden, 'fallback view');
     doc.querySelector('nav a[href="#resources"]').click(); await settle();
     doc.querySelector('nav a[href="#resources"]').click(); await settle(); equal(doc.activeElement.id, 'resources-title');
-    equal($('resources').querySelectorAll('.resource-card').length, 4);
-    equal($('resources').querySelector('time').dateTime, '2026-09-12');
+    equal($('resources').querySelectorAll('.opportunity-card').length, 14);
+    equal($('resources').querySelector('time').dateTime, '2026-09-13');
     doc.querySelector('nav a[href="#explore"]').click(); await settle();
   });
   await check('major-first and interest-first search render distinct matches', () => {
@@ -154,7 +159,7 @@
   });
   await check('About and official resources remain visible if the app script does not load', async () => {
     await load({ missingApp: true }); assert(!$('about').hidden && !$('resources').hidden, 'static content available');
-    assert($('resources').querySelector('a').href === 'https://now.calpoly.edu/organizations', 'official link available');
+    assert($('resources').querySelector('a').href === 'https://advising.calpoly.edu/', 'official link available');
   });
   await check('unsafe source data is rejected by the real controller', async () => {
     await load({ dataSetup: 'OPPORTUNITIES[0].source="javascript:alert(1)";' }); equal(cards().length, 0); assert($('status').textContent.includes('could not be loaded'), 'unsafe source rejected');
@@ -217,6 +222,138 @@
   await check('missing directory fails visibly instead of silently showing a partial catalog', async () => {
     await load({ missingDirectory: true, fullCatalog: true }); equal(cards().length, 0);
     assert($('status').textContent.includes('could not be loaded'), 'directory failure message');
+  });
+  await check('navigation order and mobile disclosure support selection and Escape', async () => {
+    frame.style.width = '375px';
+    await load();
+    equal([...doc.querySelectorAll('nav a')].map(link => link.hash), ['#explore', '#study', '#resources', '#bookmarks']);
+    $('menu-toggle').click(); equal($('menu-toggle').getAttribute('aria-expanded'), 'true');
+    $('menu-toggle').dispatchEvent(new frame.contentWindow.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    equal($('menu-toggle').getAttribute('aria-expanded'), 'false'); equal(doc.activeElement.id, 'menu-toggle');
+    $('menu-toggle').click(); doc.querySelector('a[href="#study"]').click(); await settle();
+    equal($('menu-toggle').getAttribute('aria-expanded'), 'false'); equal(doc.activeElement.id, 'study-title');
+    frame.style.width = '100%';
+  });
+  await check('related swimming activities are explained separately without direct-result duplicates', async () => {
+    await load({ fullCatalog: true }); search('swimming');
+    equal(cards().length, 2); assert(!$('related-section').hidden, 'related section visible');
+    const related = [...$('related-results').querySelectorAll('.opportunity-card')];
+    assert(related.some(card => /water polo|sailing|surf/i.test(card.textContent)), 'other water activities');
+    assert(related.every(card => !ids().includes(card.dataset.id)), 'no direct duplicate');
+    assert(related.every(card => card.querySelector('.card-reason').textContent.includes('water activities')), 'honest topic explanation');
+    const before = related.map(card => card.dataset.id); search('swimming');
+    equal([...$('related-results').querySelectorAll('.opportunity-card')].map(card => card.dataset.id), before);
+    choose('type', 'research'); equal($('related-results').children.length, 0);
+    $('browse-all').click(); assert($('related-section').hidden, 'no fabricated recommendations on blank browse');
+    search('zzzz nonexistent'); assert($('related-section').hidden, 'unknown empty state');
+  });
+  await check('related pagination appends unique items and keeps selected category constraints', async () => {
+    await load({ fullCatalog: true }); search('AI');
+    const before = [...$('related-results').querySelectorAll('.opportunity-card')].map(card => card.dataset.id);
+    assert(!$('related-more').hidden, 'more related computing activities');
+    $('related-more').click();
+    const after = [...$('related-results').querySelectorAll('.opportunity-card')].map(card => card.dataset.id);
+    equal(after.slice(0, before.length), before); assert(after.length > before.length, 'appended'); equal(new Set(after).size, after.length);
+    choose('type', 'club'); assert([...$('related-results').querySelectorAll('.opportunity-card')].every(card => card.dataset.type === 'club'), 'category respected');
+  });
+  const campusIds = view => [...$(`${view}-results`).querySelectorAll('.opportunity-card')].map(card => card.dataset.id);
+  const campusSearch = (view, query) => { $(`${view}-search`).value = query; $(`${view}-form`).requestSubmit(); };
+  await check('study search covers locations and verified features, AND filters, empty and recovery cases', async () => {
+    await load(); equal(campusIds('study').length, 10);
+    doc.querySelector('a[href="#study"]').click(); await settle();
+    campusSearch('study', '115C'); equal(campusIds('study'), ['dss-study']);
+    equal(doc.activeElement.id, 'study-results-title');
+    campusSearch('study', '   '); equal(campusIds('study').length, 10);
+    choose('study-filter', 'reservable'); equal(campusIds('study'), ['student-fishbowls', 'dss-study']);
+    choose('study-filter', 'outdoors'); equal(campusIds('study'), []); assert(!$('study-empty').hidden, 'no contradictory features');
+    $('study-clear').click(); campusSearch('study', 'power access'); equal(campusIds('study'), ['uu-common']);
+    campusSearch('study', '<img>'); equal(campusIds('study'), []);
+    $('study-clear').click(); equal(campusIds('study').length, 10);
+  });
+  await check('resources support search and categories beyond the previous four links', () => {
+    equal(campusIds('resources').length, 14);
+    campusSearch('resources', 'equipment'); assert(campusIds('resources').includes('tech-rental') && campusIds('resources').includes('outdoor-rentals'), 'equipment options');
+    choose('resources-filter', 'technology'); equal(campusIds('resources'), ['tech-rental']);
+    $('resources-clear').click(); choose('resources-filter', 'making'); equal(campusIds('resources'), ['makerspace', 'craft-center']);
+    campusSearch('resources', 'unknown'); equal(campusIds('resources'), []); assert(!$('resources-empty').hidden, 'resource empty state');
+    $('resources-clear').click(); equal(campusIds('resources').length, 14);
+  });
+  await check('every campus card opens its matching official source and access notes', async () => {
+    await load({ reduced: true });
+    for (const view of ['study', 'resources']) {
+      doc.querySelector(`a[href="#${view}"]`).click(); await settle();
+      for (const card of $(`${view}-results`).querySelectorAll('.opportunity-card')) {
+        card.click(); equal($('detail-title').textContent, card.querySelector('.card-title').textContent);
+        assert(frame.contentWindow.OpportunityMatcher.safeSource($('detail-link').href), 'safe official link');
+        assert($('detail-note').textContent.length > 20, 'access note');
+        await new Promise(resolve => { $('opportunity-dialog').addEventListener('close', resolve, { once: true }); $('close-dialog').click(); });
+      }
+    }
+  });
+  await check('bookmark icons save all kinds independently of card opening and persist on reload', async () => {
+    await load();
+    for (const view of ['explore', 'study', 'resources']) {
+      doc.querySelector(`a[href="#${view}"]`).click(); await settle();
+      doc.querySelector(`#${view} .bookmark-button`).click(); assert(!$('opportunity-dialog').open, 'save does not open card');
+    }
+    equal($('bookmark-count').textContent, '3'); equal(campusIds('bookmarks').length, 3);
+    await load({ keepStorage: true }); equal($('bookmark-count').textContent, '3'); equal(campusIds('bookmarks').length, 3);
+    equal(doc.querySelector('#results .bookmark-button').getAttribute('aria-pressed'), 'true');
+    const allIds = [...doc.querySelectorAll('[id]')].map(element => element.id); equal(new Set(allIds).size, allIds.length);
+  });
+  await check('saved search and type filters preserve bookmarks and removing the last match restores focus', async () => {
+    doc.querySelector('a[href="#bookmarks"]').click(); await settle();
+    choose('bookmark-kind', 'study'); equal(campusIds('bookmarks'), ['kennedy-study']);
+    campusSearch('bookmarks', 'nonexistent'); equal(campusIds('bookmarks'), []); equal($('bookmark-count').textContent, '3');
+    $('bookmarks-clear').click(); equal(campusIds('bookmarks').length, 3);
+    for (let i = 0; i < 3; i++) { const button = $('bookmarks-results').querySelector('.bookmark-button'); button.focus(); button.click(); }
+    equal($('bookmark-count').textContent, '0'); equal(doc.activeElement.id, 'bookmarks-results-title'); assert(!$('bookmarks-empty').hidden, 'empty collection');
+    await load({ keepStorage: true }); equal($('bookmark-count').textContent, '0');
+  });
+  await check('dialog bookmark state synchronizes with cards and removed saved-card focus recovers', async () => {
+    await load({ reduced: true }); cards()[0].click(); $('detail-bookmark').click();
+    equal($('detail-bookmark').getAttribute('aria-pressed'), 'true'); equal(doc.querySelector('#results .bookmark-button').getAttribute('aria-pressed'), 'true');
+    await new Promise(resolve => { $('opportunity-dialog').addEventListener('close', resolve, { once: true }); $('close-dialog').click(); });
+    doc.querySelector('a[href="#bookmarks"]').click(); await settle(); $('bookmarks-results').querySelector('.opportunity-card').click(); $('detail-bookmark').click();
+    await new Promise(resolve => { $('opportunity-dialog').addEventListener('close', resolve, { once: true }); $('close-dialog').click(); });
+    equal(doc.activeElement.id, 'bookmarks-title'); equal($('bookmark-count').textContent, '0');
+  });
+  await check('storage events update the collection and unknown saved IDs are harmless', async () => {
+    await load();
+    window.fixtureStorage.set('cal-poly-bookmarks-v1', JSON.stringify(['study:hub24', 'opportunity:unavailable']));
+    frame.contentWindow.dispatchEvent(new frame.contentWindow.StorageEvent('storage', { key: 'cal-poly-bookmarks-v1' }));
+    equal(campusIds('bookmarks'), ['hub24']); equal($('bookmark-count').textContent, '1');
+    window.fixtureStorage.clear(); frame.contentWindow.dispatchEvent(new frame.contentWindow.StorageEvent('storage', { key: null }));
+    equal(campusIds('bookmarks'), []); equal($('bookmark-count').textContent, '0');
+  });
+  await check('blocked, quota-limited, and corrupt storage retain session functionality with honest warnings', async () => {
+    for (const mode of ['blocked', 'quota', 'corrupt']) {
+      window.fixtureStorage = new Map([['cal-poly-bookmarks-v1', '{bad']]);
+      await load({ storageMode: mode, keepStorage: mode === 'corrupt' });
+      doc.querySelector('#results .bookmark-button').click(); equal($('bookmark-count').textContent, '1');
+      assert(!$('storage-note').hidden && $('storage-note').textContent.includes('visit only'), 'visible storage warning');
+      doc.querySelector('a[href="#study"]').click(); await settle(); doc.querySelector('a[href="#bookmarks"]').click(); await settle();
+      equal(campusIds('bookmarks'), ['csai']);
+      if (mode === 'corrupt') equal(window.fixtureStorage.get('cal-poly-bookmarks-v1'), '{bad');
+    }
+  });
+  await check('bookmarks paginate past 24 and can find items not yet displayed', async () => {
+    await load({ fullCatalog: true });
+    const keys = frame.contentWindow.OPPORTUNITIES.slice(0, 53).map(item => `opportunity:${item.id}`);
+    window.fixtureStorage.set('cal-poly-bookmarks-v1', JSON.stringify(keys));
+    frame.contentWindow.dispatchEvent(new frame.contentWindow.StorageEvent('storage', { key: 'cal-poly-bookmarks-v1' }));
+    equal(campusIds('bookmarks').length, 24); $('bookmarks-more').click(); equal(campusIds('bookmarks').length, 48);
+    $('bookmarks-more').click(); equal(campusIds('bookmarks').length, 53); equal(new Set(campusIds('bookmarks')).size, 53); assert($('bookmarks-more').hidden, 'last saved page');
+    campusSearch('bookmarks', frame.contentWindow.OPPORTUNITIES[52].title); assert(campusIds('bookmarks').includes(keys[52].split(':')[1]), 'search full saved catalog');
+  });
+  await check('missing or unsafe campus data fails visibly with static official recovery links', async () => {
+    for (const options of [{ missingCampus: true }, { dataSetup: 'CAMPUS_PLACES[0].source="javascript:alert(1)"; CAMPUS_RESOURCES=null;' }]) {
+      await load(options); equal(campusIds('study'), []); equal(campusIds('resources'), []);
+      assert($('study-status').textContent.includes('could not load'), 'study error'); assert($('resources-status').textContent.includes('could not load'), 'resource error');
+      assert($('study').querySelector('a').href.includes('library.calpoly.edu'), 'static study link');
+      assert($('resources').querySelector('a').href.includes('advising.calpoly.edu'), 'static resource link');
+      equal(cards().length, 18);
+    }
   });
   document.getElementById('summary').textContent = `${passed} passed; ${failed} failed. Native keyboard, viewport, and OS reduced-motion checks are separate.`;
   document.title = `${failed ? 'FAIL' : 'PASS'} — Opportunity Matcher browser tests`;

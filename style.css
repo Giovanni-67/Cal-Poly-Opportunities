@@ -121,11 +121,36 @@ dialog h2 { font-size: 29px; color: var(--ink); line-height: 1.2; }
 #detail-note { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 17px 0; }
 .learn-more { display: flex; justify-content: center; align-items: center; gap: 12px; margin: 0 0 19px; }
 .source-note { color: var(--muted); font-size: 11px; line-height: 1.6; margin: 0; text-align: center; }
+.menu-toggle { display: none; align-items: center; gap: 4px; margin-left: auto; padding: 10px; min-height: 44px; border: 1px solid var(--border); border-radius: 6px; background: white; color: var(--forest); font-size: 13px; }
+.bookmark-count { display: inline-block; min-width: 20px; padding: 2px 5px; margin-left: 3px; border-radius: 20px; background: #e9f1eb; color: var(--forest); text-align: center; font-size: 11px; }
+.eyebrow { display: block; color: #7a6127; font-size: 11px; font-weight: 650; text-transform: uppercase; letter-spacing: 1.8px; margin-bottom: 15px; }
+.section-note { color: var(--muted); font-size: 14px; line-height: 1.7; margin: 12px 0 22px; }
+.related-section { margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--border); }
+.card-shell { position: relative; }
+.card-shell .card-top { padding-right: 29px; align-items: center; }
+.card-shell .category { white-space: normal; text-align: center; padding: 6px 9px; }
+.bookmark-button { position: absolute; right: 5px; top: 25px; width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: #627871; transition: color .18s, background .18s; }
+.bookmark-button:hover, .detail-bookmark:hover { background: #e9f1eb; color: var(--forest); }
+[data-bookmark][aria-pressed="true"] { color: var(--forest); }
+[data-bookmark][aria-pressed="true"] svg { fill: #dce9df; stroke-width: 2; }
+button:disabled { cursor: default; opacity: .55; }
+.detail-bookmark { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin: -6px 0 18px; padding: 8px 12px; color: var(--forest); background: #f5f7f3; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
+.card-location { color: var(--muted); font-size: 12px; line-height: 1.6; margin-bottom: 12px; }
+.card-features { display: flex; flex-wrap: wrap; gap: 6px; margin: -4px 0 18px; }
+.feature { padding: 4px 7px; border-radius: 5px; background: #f1f4ed; color: #3c594b; font-size: 11px; line-height: 1.5; }
+.info-panel .filter-row { display: block; padding: 0; }
+.info-panel .filter-row legend { position: static; float: none; margin-bottom: 12px; }
+[id$="results-title"] { scroll-margin-top: 110px; }
+[id$="results-title"]:focus { outline: none; }
+.site-footer > div { display: flex; flex-wrap: wrap; gap: 14px 24px; }
+.toast { position: fixed; z-index: 3; bottom: 20px; left: 50%; transform: translateX(-50%); margin: 0; max-width: calc(100% - 32px); width: max-content; border-radius: 8px; padding: 13px 20px; background: var(--forest); color: white; box-shadow: 0 4px 24px #154c3b30; font-size: 14px; line-height: 1.5; pointer-events: none; }
+.toast:empty { display: none; }
+.storage-note { position: sticky; bottom: 0; z-index: 2; background: #fff4d9; color: #574516; border-top: 1px solid #d7c492; margin: 0; padding: 12px 24px; font-size: 13px; line-height: 1.5; text-align: center; }
 @keyframes backdrop-in { from { backdrop-filter: blur(0); background: #16261f00; } }
 @keyframes backdrop-out { to { backdrop-filter: blur(0); background: #16261f00; } }
 @media (max-width: 1100px) {
   .header-inner, .page { padding-left: 32px; padding-right: 32px; }
-  .header-inner { gap: 18px; }.attribution { max-width: 90px; line-height: 1.5; }
+  .header-inner { gap: 18px; }.attribution { display: none; }nav { gap: 20px; }
   .card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }.chip span { padding-left: 15px; padding-right: 15px; }
 }
 @media (max-width: 800px) {
@@ -133,6 +158,14 @@ dialog h2 { font-size: 29px; color: var(--ink); line-height: 1.2; }
   nav { gap: 20px; font-size: 12px; }.hero { padding-top: 48px; }.card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .filter-row { padding-left: 0; display: block; margin-top: 22px; }.filter-row legend { position: static; float: none; margin-bottom: 12px; }
   .primary { padding-left: 18px; padding-right: 18px; }.how-it-works { grid-template-columns: 1fr; gap: 18px; }.step-number { margin-bottom: 8px; }
+  .header-inner { min-height: 76px; gap: 8px; padding-top: 12px; padding-bottom: 12px; }
+  .js-navigation .menu-toggle { display: inline-flex; }
+  nav { width: 100%; margin: 0; flex-wrap: wrap; }
+  .js-navigation nav { display: none; }
+  .js-navigation nav.menu-open { display: flex; flex-direction: column; gap: 0; padding: 12px 0 4px; }
+  nav a { min-height: 44px; padding: 12px; font-size: 14px; }
+  nav a.active { background: #eef3ed; border-radius: 5px; }
+  nav a.active::after { display: none; }
 }
 @media (max-width: 520px) {
   .header-inner, .page { padding-left: 22px; padding-right: 22px; }.header-inner { padding-top: 18px; padding-bottom: 12px; }
@@ -144,6 +177,10 @@ dialog h2 { font-size: 29px; color: var(--ink); line-height: 1.2; }
   .results-toolbar { margin: 12px 0 18px; }#status { font-size: 12px; }.card-grid { grid-template-columns: 1fr; gap: 16px; }.opportunity-card { min-height: 270px; padding: 23px; }.card-title { font-size: 21px; }.card-description { font-size: 15px; }
   h1, #search, #results-title { scroll-margin-top: 160px; }.resource-grid { grid-template-columns: 1fr; gap: 16px; }.resource-card { padding: 24px; }.resource-title { font-size: 20px; }
   .site-footer { flex-direction: column; align-items: flex-start; gap: 12px; margin-top: 40px; }dialog { padding: 27px 23px; max-height: calc(100dvh - 28px); }dialog h2 { font-size: 26px; }.detail-top { margin-top: 4px; margin-bottom: 20px; }
+  .header-inner, .page { padding-left: 18px; padding-right: 18px; }.wordmark { font-size: 18px; }.menu-toggle { padding: 8px; }
+  h1, #search, [id$="results-title"] { scroll-margin-top: 95px; }
+  .info-panel .results-heading { display: flex; }.info-panel .results-heading h2 { font-size: 22px; }
+  .bookmark-button { right: 9px; }.toast { bottom: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after, dialog::backdrop { animation: none !important; transition: none !important; scroll-behavior: auto !important; }.opportunity-card:hover { transform: none; }

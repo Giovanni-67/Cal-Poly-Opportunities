@@ -242,10 +242,8 @@
     button.setAttribute('aria-haspopup', 'dialog');
     button.setAttribute('aria-describedby', `description-${cardId} reason-${cardId}`);
     const top = span('card-top');
-    const tile = span('icon-tile');
-    tile.append(icon(item.icon));
-    top.append(tile, span('category', item.category || TYPES[item.type]));
-    const action = span('card-action', 'Explore');
+    top.append(span('category', item.category || TYPES[item.type]));
+    const action = span('card-action', 'View details');
     action.append(icon('arrow'));
     const description = span('card-description', item.description);
     description.id = `description-${cardId}`;

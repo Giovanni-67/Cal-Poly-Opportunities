@@ -57,7 +57,7 @@ input::placeholder { color: #617276; opacity: 1; }
 .card-shell { position: relative; display: flex; min-width: 0; border-bottom: 1px solid var(--border); }
 .opportunity-card { position: relative; display: flex; flex-direction: column; align-items: stretch; width: 100%; padding: 24px 48px 22px 0; text-align: left; background: transparent; color: var(--ink); border: 0; border-radius: 0; transition: background .15s; }
 .opportunity-card:hover { background: #f0f3ed; }
-.card-top { order: 0; margin: 0 0 8px; }
+.card-top { order: 0; margin: 0 0 8px; align-self: flex-end; }
 .category { color: var(--muted); font: 12px/1.5 "Segoe UI", Arial, sans-serif; }
 .card-title { display: block; font-size: 23px; font-weight: 700; line-height: 1.25; letter-spacing: -.45px; margin-bottom: 8px; overflow-wrap: anywhere; }
 .card-description { display: block; font-size: 15px; line-height: 1.6; margin-bottom: 14px; }
@@ -84,6 +84,19 @@ input::placeholder { color: #617276; opacity: 1; }
 .panel-action { display: inline-flex; align-items: center; gap: 16px; white-space: normal; }
 .review-note, .section-note { color: var(--muted); font-size: 14px; line-height: 1.7; margin: 12px 0 18px; }
 .review-note { max-width: 850px; margin-top: 24px; }
+.directory-heading { grid-column: 1 / -1; list-style: none; padding: 24px 0 8px; }
+.directory-heading h3 { font: 600 14px/1.5 "Segoe UI", Arial, sans-serif; color: var(--forest); margin: 0; }
+#resources-results, #bookmarks-results { grid-template-columns: 1fr; }
+#resources-results .opportunity-card, #bookmarks-results .opportunity-card { display: grid; grid-template-columns: minmax(180px, .8fr) minmax(240px, 1.2fr); column-gap: 32px; padding: 20px 52px 20px 0; }
+#resources-results .card-top, #bookmarks-results .card-top { grid-column: 1; grid-row: 1; justify-self: start; margin-bottom: 6px; }
+#resources-results .card-title, #bookmarks-results .card-title { grid-column: 1; grid-row: 2 / 4; }
+#resources-results .card-description, #bookmarks-results .card-description { grid-column: 2; grid-row: 1 / 3; margin-bottom: 8px; }
+#resources-results .card-location, #bookmarks-results .card-location, #bookmarks-results .card-features { grid-column: 2; }
+#resources-results .card-reason, #bookmarks-results .card-reason { grid-column: 2; }
+#resources-results .card-action, #bookmarks-results .card-action { grid-column: 2; margin-top: 6px; }
+.study-photo { margin: 0 0 24px; max-width: 1080px; }
+.study-photo img { display: block; width: 100%; height: 220px; object-fit: cover; object-position: center 45%; background: #e5e9df; }
+.study-photo figcaption { font-size: 11px; color: var(--muted); line-height: 1.6; margin-top: 8px; }
 .site-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; padding: 28px 0; margin-top: 48px; border-top: 1px solid var(--border); }
 .site-footer p { font-size: 13px; color: var(--muted); line-height: 1.8; margin: 0; }
 .site-footer > div { display: flex; flex-wrap: wrap; gap: 14px 24px; }
@@ -123,7 +136,7 @@ dialog h2 { font-size: 29px; color: var(--ink); line-height: 1.2; }
 .learn-more { display: flex; justify-content: center; align-items: center; gap: 12px; margin: 0 0 19px; }
 .source-note { color: var(--muted); font-size: 11px; line-height: 1.6; margin: 0; text-align: center; }
 .report-layout { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 36px; margin-top: 10px; align-items: start; }
-.report-box { padding: 30px; border: 1px solid var(--gold); border-radius: 10px; background: white; }
+.report-box { padding: 0; border: 0; background: transparent; }
 .report-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
 #bug-form label { display: block; color: var(--forest); font-size: 14px; font-weight: 600; margin-bottom: 8px; }
 #bug-form input:not([type="hidden"]), #bug-form textarea { font: inherit; width: 100%; border: 1px solid #becfc5; padding: 12px; border-radius: 6px; color: var(--ink); background: #fdfefb; margin-bottom: 18px; min-height: 46px; }
@@ -141,6 +154,8 @@ dialog h2 { font-size: 29px; color: var(--ink); line-height: 1.2; }
 .career-section { margin-top: 24px; }
 .career-section .results-heading { flex-wrap: wrap; gap: 12px; }
 .career-section .results-heading > a { font-size: 14px; }
+.career-search-details { margin: 10px 0; }
+.career-search-details summary { cursor: pointer; color: var(--forest); font-size: 14px; padding: 10px 0; width: fit-content; }
 .career-filters { display: flex; gap: 20px; margin: 16px 0 8px; max-width: 760px; }
 .career-filters label { display: grid; gap: 6px; font-size: 12px; font-weight: 600; }
 .career-filters label:first-child { flex: 1; }
@@ -196,6 +211,8 @@ dialog h2 { font-size: 29px; color: var(--ink); line-height: 1.2; }
   .results-heading { flex-wrap: wrap; gap: 10px; }
   .results-heading h2 { font-size: 25px; } .results-toolbar { gap: 12px; }
   .card-grid { grid-template-columns: 1fr; } .opportunity-card { padding-top: 20px; }
+  #resources-results .opportunity-card, #bookmarks-results .opportunity-card { display: flex; gap: 0; }
+  .study-photo img { height: 160px; }
   .card-title { font-size: 23px; }
   .career-filters { flex-direction: column; gap: 10px; }
   .career-card { grid-template-columns: 65px minmax(0, 1fr); gap: 16px; }
@@ -204,7 +221,7 @@ dialog h2 { font-size: 29px; color: var(--ink); line-height: 1.2; }
   .career-content h3 { font-size: 20px; }
   .site-footer { align-items: flex-start; flex-direction: column; gap: 12px; margin-top: 36px; }
   .report-fields { grid-template-columns: 1fr; gap: 0; } .report-actions { flex-wrap: wrap; gap: 12px; }
-  .report-box { padding: 20px 16px; }
+  .report-box { padding: 0; }
   dialog { padding: 28px 22px; max-height: calc(100dvh - 28px); } dialog h2 { font-size: 27px; }
   h1, #search, [id$="results-title"] { scroll-margin-top: 95px; }
 }

@@ -350,7 +350,7 @@
     for (const options of [{ missingCampus: true }, { dataSetup: 'CAMPUS_PLACES[0].source="javascript:alert(1)"; CAMPUS_RESOURCES=null;' }]) {
       await load(options); equal(campusIds('study'), []); equal(campusIds('resources'), []);
       assert($('study-status').textContent.includes('could not load'), 'study error'); assert($('resources-status').textContent.includes('could not load'), 'resource error');
-      assert($('study').querySelector('a').href.includes('library.calpoly.edu'), 'static study link');
+      assert($('study').querySelector('a[href^="https://library.calpoly.edu"]'), 'static study link remains available alongside photo credits');
       assert($('resources').querySelector('a').href.includes('advising.calpoly.edu'), 'static resource link');
       equal(cards().length, 18);
     }
@@ -432,6 +432,44 @@
     equal($('career-list').children.length, 0);
     assert($('career-status').textContent.includes('No upcoming'), 'expired snapshot is honest');
     assert($('career-events').querySelector('a[href="https://careerservices.calpoly.edu/explore-services/mustangjobs"]'), 'directory still usable');
+  });
+  await check('campus groups retain every record once and disappear when filters have no matches', async () => {
+    await load();
+    for (const [view, count] of [['study', 10], ['resources', 14]]) {
+      doc.querySelector(`a[href="#${view}"]`).click(); await settle();
+      equal(campusIds(view).length, count); equal(new Set(campusIds(view)).size, count);
+      const headings = () => [...$(`${view}-results`).querySelectorAll('.directory-heading')];
+      assert(headings().length > 1, 'meaningful groups');
+      for (const heading of headings()) assert(heading.nextElementSibling?.classList.contains('card-shell'), 'each group has results');
+      campusSearch(view, 'zzzz-no-campus-match'); equal(headings().length, 0); equal(campusIds(view), []);
+      $(`${view}-clear`).click(); equal(campusIds(view).length, count);
+    }
+    campusSearch('resources', 'tutoring');
+    assert(campusIds('resources').length > 0 && campusIds('resources').length < 14, 'search still refines grouped resources');
+  });
+  await check('event search expands without hiding the agenda and retains its independent query', async () => {
+    await load({ dataSetup: "Date.now=()=>1799956800000; CareerEvents.events.forEach(e=>{ e.start=e.start.replace('2026','2027'); e.end=e.end.replace('2026','2027'); });" });
+    const details = doc.querySelector('.career-search-details');
+    assert(!details.open && $('career-list').children.length === 3, 'agenda visible with search collapsed');
+    details.querySelector('summary').click(); assert(details.open && $('career-search').getClientRects().length, 'search is reachable');
+    $('career-search').value = 'RoviSys'; $('career-form').requestSubmit(); equal($('career-list').children.length, 1);
+    details.querySelector('summary').click(); assert(!details.open, 'collapses'); equal($('career-list').children.length, 1);
+    details.querySelector('summary').click(); equal($('career-search').value, 'RoviSys');
+    search('AI'); equal($('career-list').children.length, 1);
+  });
+  await check('every redesigned view fits narrow mobile, tablet, and desktop widths', async () => {
+    await load(); doc.querySelector('#results .bookmark-button').click();
+    for (const width of [320, 375, 768, 1280]) {
+      frame.style.width = width + 'px';
+      for (const view of ['explore', 'study', 'resources', 'bookmarks', 'about', 'report']) {
+        doc.querySelector(`a[href="#${view}"]`).click(); await settle();
+        assert(doc.documentElement.scrollWidth <= doc.documentElement.clientWidth + 1, `${view} overflows at ${width}px`);
+        for (const button of $(view).querySelectorAll('.bookmark-button')) {
+          const box = button.getBoundingClientRect(); assert(box.width >= 44 && box.height >= 44, 'bookmark target remains usable');
+        }
+      }
+    }
+    frame.style.width = '100%';
   });
   document.getElementById('summary').textContent = `${passed} passed; ${failed} failed. Native keyboard, viewport, and OS reduced-motion checks are separate.`;
   document.title = `${failed ? 'FAIL' : 'PASS'} — Opportunity Matcher browser tests`;

@@ -89,3 +89,7 @@ Related-activity groups in `discovery.js` are explicitly editorial. A swimming q
 - [MustangJobs access](https://careerservices.calpoly.edu/explore-services/mustangjobs): official route through the Cal Poly portal to employer information sessions and career fairs. The site links to these access instructions, not a fabricated direct event URL.
 
 No current public Deloitte campus visit was verified in this review. Curated entries expire at their exact end instant; all presentation uses America/Los_Angeles and the November record uses the post-DST UTC offset.
+
+## Study page photograph
+
+`assets/kennedy-library-2018.jpg` is the 960-pixel thumbnail of [Robert E. Kennedy Library, exterior, Cal Poly SLO (September 2018)](https://commons.wikimedia.org/wiki/File:Robert_E._Kennedy_Library,_exterior,_Cal_Poly_SLO_(September_2018).jpg), photographed by Stilfehler on September 15, 2018. The source identifies the work as the photographer's own and licenses it under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The image remains under that license; it is downscaled by Wikimedia and cropped for display via CSS. Attribution and license are linked in the visible caption. This exterior photograph predates the renovation and is explicitly dated; it does not establish current interiors, facilities, or availability. License and attribution checked September 14, 2026.

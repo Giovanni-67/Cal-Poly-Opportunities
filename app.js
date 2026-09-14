@@ -344,7 +344,23 @@
   function renderCampus(view, data) {
     const filters = [...$(`${view}-form`).querySelectorAll('input:checked')].map(input => input.value);
     const outcome = campusMatches(data, $(`${view}-search`).value, filters);
-    $(`${view}-results`).replaceChildren(...outcome.matches.map(match => card({ ...match, reason: $(`${view}-search`).value.trim() ? match.reason : filters.length ? `Matches ${filters.map(filter => featureLabels[filter] || filter).join(' and ')}` : `Explore ${match.item.category || 'a campus study space'}` })));
+    const results = $(`${view}-results`);
+    results.replaceChildren();
+    const groups = new Map();
+    for (const match of outcome.matches) {
+      const location = match.item.location || '';
+      const group = view === 'resources' ? match.item.category || 'Campus resources' : location.includes('Building 35') ? 'Kennedy Library · Building 35' : location.includes('Building 65') ? 'University Union · Building 65' : 'Other study spaces';
+      if (!groups.has(group)) groups.set(group, []);
+      groups.get(group).push(match);
+    }
+    for (const [group, matches] of groups) {
+      const heading = document.createElement('li');
+      heading.className = 'directory-heading';
+      const title = document.createElement('h3');
+      title.textContent = group;
+      heading.append(title);
+      results.append(heading, ...matches.map(match => card({ ...match, reason: $(`${view}-search`).value.trim() ? match.reason : filters.length ? `Matches ${filters.map(filter => featureLabels[filter] || filter).join(' and ')}` : `Explore ${match.item.category || 'a campus study space'}` })));
+    }
     $(`${view}-status`).textContent = outcome.error ? 'This collection could not load. Reload or use the official campus link below.' : `${outcome.matches.length} ${view === 'study' ? 'study spots' : 'resources'} to explore${filters.length ? ' · All selected filters applied' : ''}.`;
     $(`${view}-empty`).hidden = !!outcome.error || !!outcome.matches.length;
   }

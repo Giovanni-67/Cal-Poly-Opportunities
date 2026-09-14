@@ -381,6 +381,7 @@
     equal($('bug-form').action, 'https://formsubmit.co/gpeila@calpoly.edu'); equal($('bug-form').method, 'post'); equal($('bug-form').target, '_blank');
     equal($('bug-form').rel, 'noopener'); // FormSubmit requires the referring website; keep opener protection without suppressing it.
     assert(!$('bug-form').querySelector('[name="_captcha"][value="false"]'), 'provider spam protection preserved'); equal(payload._honey, '');
+    equal(payload._url, 'https://giovanni-67.github.io/Cal-Poly-Opportunities/#report');
     assert($('bug-status').textContent.includes('Finish sending'), 'honest handoff'); equal($('bug-description').value, payload.message);
     assert($('bug-privacy').textContent.includes('FormSubmit') && $('bug-privacy').textContent.includes('gpeila@calpoly.edu'), 'recipient and processor disclosure');
     assert($('report').querySelector('a[href^="mailto:gpeila@calpoly.edu"]'), 'email fallback'); equal(window.fixtureStorage.size, 0);

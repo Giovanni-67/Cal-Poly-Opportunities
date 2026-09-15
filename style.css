@@ -54,6 +54,9 @@ input::placeholder { color: #617276; opacity: 1; }
 .text-button { display: inline-flex; align-items: center; gap: 7px; background: none; border: 0; color: var(--forest); font-size: 14px; font-weight: 600; padding: 12px 0; min-height: 44px; }
 .text-button svg { width: 16px; height: 16px; }
 .card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; row-gap: 0; margin: 0; padding: 0; list-style: none; }
+@media (min-width: 1100px) {
+  #results, #related-results { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 32px; }
+}
 .card-shell { position: relative; display: flex; min-width: 0; border-bottom: 1px solid var(--border); }
 .opportunity-card { position: relative; display: flex; flex-direction: column; align-items: stretch; width: 100%; padding: 24px 48px 22px 0; text-align: left; background: transparent; color: var(--ink); border: 0; border-radius: 0; transition: background .15s; }
 .opportunity-card:hover { background: #f0f3ed; }

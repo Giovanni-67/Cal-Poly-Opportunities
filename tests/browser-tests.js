@@ -471,6 +471,20 @@
     }
     frame.style.width = '100%';
   });
+  await check('opportunity and related results use three wide-screen columns and adapt without reordering', async () => {
+    await load({ fullCatalog: true }); search('swimming');
+    const original = ids();
+    for (const [width, columns] of [[1280, 3], [1100, 3], [1099, 2], [768, 2], [375, 1]]) {
+      frame.style.width = width + 'px'; await settle();
+      for (const id of ['results', 'related-results']) {
+        const boxes = [...$(id).querySelectorAll('.opportunity-card')].map(card => card.getBoundingClientRect());
+        equal(new Set(boxes.slice(0, columns).map(box => Math.round(box.left))).size, Math.min(columns, boxes.length));
+        assert($(id).scrollWidth <= $(id).clientWidth + 1, `${id} fits at ${width}px`);
+      }
+      equal(ids(), original);
+    }
+    frame.style.width = '100%';
+  });
   await check('rendered editorial text, muted labels, and controls meet contrast thresholds', async () => {
     await load({ dataSetup: "Date.now=()=>1799956800000; CareerEvents.events.forEach(e=>{ e.start=e.start.replace('2026','2027'); e.end=e.end.replace('2026','2027'); });" });
     const css = element => frame.contentWindow.getComputedStyle(element);

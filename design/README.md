@@ -1,6 +1,6 @@
 # Campus guide redesign
 
-Status: direction approved September 14, 2026; visual mockup pending review. The user asked to see the proposed desktop and mobile design before the live interface changes.
+Status: direction and desktop/mobile mockup approved September 14, 2026. Design PR #9 was merged; implementation is on `build/campus-guide-refresh`. The user authorized tested incremental commits, pushes, PRs, and merges.
 
 ## Visual proposal
 
@@ -8,7 +8,7 @@ Status: direction approved September 14, 2026; visual mockup pending review. The
 
 This generated image is a composition study, not a functional page or a new factual source. It demonstrates editorial headings, a compact agenda, and restrained opportunity listings. It abbreviates the collection and controls for review: implementation must retain every existing interest choice, company/event search, event filters, source/review disclosures, all dated records, pagination, and bookmark behavior. The pictured fair dates refer to 2026; production must continue to display years and expire ended events. Event times must come from `career-events.js`, not image text. No extra header search action is needed because the main search already serves that purpose.
 
-The image uses no real or generated campus photography. Study Spots imagery will require separate sourcing and reuse checks. Functional, contrast, responsive and keyboard verification will apply to the eventual HTML implementation; an image does not prove those behaviors.
+The proposal uses no real or generated campus photography. The implemented Study Spots view adds a separately sourced, credited Kennedy Library exterior photograph from 2018 under CC BY-SA 4.0; see [SOURCES.md](../SOURCES.md). It is explicitly labeled as predating the renovation. Functional, contrast, responsive and keyboard verification applies to the HTML implementation; an image does not prove those behaviors.
 
 ## Direction
 

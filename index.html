@@ -6,12 +6,17 @@
   <meta name="referrer" content="no-referrer-when-downgrade">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Discover Cal Poly opportunities, find study spots and campus resources, and bookmark your favorites. Search by major or interest. An independent student project.">
+  <link rel="canonical" href="https://giovanni-67.github.io/Cal-Poly-Opportunities/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Cal Poly Opportunities — Your campus guide">
+  <meta property="og:description" content="Find clubs, projects, career events, study spots, and campus support. Search by major or interest and save your favorites.">
+  <meta property="og:url" content="https://giovanni-67.github.io/Cal-Poly-Opportunities/">
   <title>Cal Poly Opportunities — Find your next opportunity</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=20260914-1">
+  <link rel="stylesheet" href="style.css?v=20260914-3">
   <script defer src="career-events.js?v=20260914-1"></script>
-  <script defer src="club-data.js?v=20260913-3"></script><script defer src="matcher.js?v=20260913-3"></script><script defer src="data.js?v=20260913-3"></script><script defer src="discovery.js?v=20260913-3"></script><script defer src="bookmarks.js?v=20260913-3"></script><script defer src="campus-data.js?v=20260913-3"></script><script defer src="app.js?v=20260913-6"></script>
-  <script defer src="bug-report.js?v=20260913-3"></script><script defer src="career-ui.js?v=20260914-1"></script>
+  <script defer src="club-data.js?v=20260913-3"></script><script defer src="matcher.js?v=20260913-3"></script><script defer src="data.js?v=20260913-3"></script><script defer src="discovery.js?v=20260913-3"></script><script defer src="bookmarks.js?v=20260913-3"></script><script defer src="campus-data.js?v=20260913-3"></script><script defer src="app.js?v=20260914-3"></script>
+  <script defer src="bug-report.js?v=20260913-3"></script><script defer src="career-ui.js?v=20260914-2"></script>
 </head>
 <body>
   <a class="skip-link" href="#search">Skip to opportunity search</a>
@@ -23,9 +28,9 @@
   <main class="page">
     <div id="explore" data-view>
     <section class="hero" aria-labelledby="page-title">
-      <h1 id="page-title" tabindex="-1">Find your next opportunity.</h1>
-      <p>Explore by major or interest. Stay open to something new.</p>
-      <span class="gold-rule" aria-hidden="true"></span>
+      <h1 id="page-title" tabindex="-1">Find clubs, projects, and career events at Cal Poly.</h1>
+      <p>Search your major or an interest. Save what you want to try.</p>
+
     </section>
     <section aria-label="Find opportunities">
       <form id="search-form" role="search">
@@ -62,16 +67,17 @@
       </form>
     </section>
     <section id="career-events" class="career-section" aria-labelledby="career-title">
-      <div class="results-heading"><div><span class="eyebrow">Make the connection</span><h2 id="career-title">Upcoming career fairs &amp; company visits</h2></div><a href="https://careerservices.calpoly.edu/career-fairs-schedule">Full official schedule →</a></div>
-      <p class="section-note">Meet employers, explore internships, and put a date on your next step.</p>
-      <form id="career-form" class="career-filters" role="search" aria-label="Career events" hidden>
+      <div class="results-heading"><div><h2 id="career-title">Coming up on campus</h2></div><a href="https://careerservices.calpoly.edu/career-fairs-schedule">Full official schedule →</a></div>
+      <p class="section-note">Career fairs, networking, and publicly announced company visits.</p>
+      <details class="career-search-details"><summary>Search events or companies</summary><form id="career-form" class="career-filters" role="search" aria-label="Career events" hidden>
         <label for="career-search">Find an event or company<input id="career-search" type="search" maxlength="200" placeholder="Try Business or RoviSys" aria-describedby="career-coverage"></label>
         <label for="career-type">Event filter<select id="career-type" name="career-type"><option value="all">All events</option><option value="fair">Career fairs</option><option value="networking">Networking</option><option value="company">Announced companies</option></select></label>
       </form>
+      </details>
       <p id="career-status" class="section-note" role="status">See the official schedule for upcoming events.</p>
       <ul id="career-list" class="career-grid" aria-label="Upcoming career events"></ul>
       <button id="career-more" class="text-button" type="button" aria-expanded="false" aria-controls="career-list" hidden>Show all upcoming events</button>
-      <div class="career-directory"><div><h3>Who's coming? See the employer lists.</h3><p>Open MustangJobs through your Cal Poly portal, select the fair, and view its employers and location. Search company names there for information sessions, too.</p></div><a class="primary" href="https://careerservices.calpoly.edu/explore-services/mustangjobs">Employer lists via MustangJobs →<span class="sr-only"> (Cal Poly sign-in required)</span></a></div>
+      <div class="career-directory"><div><h3>Who's coming? See the employer lists.</h3><p>Open MustangJobs through your Cal Poly portal, select the fair, and view its employers and location. Search company names there for information sessions, too.</p></div><a href="https://careerservices.calpoly.edu/explore-services/mustangjobs">Employer lists via MustangJobs →<span class="sr-only"> (Cal Poly sign-in required)</span></a></div>
       <p id="career-coverage" class="section-note">Public listings reviewed September 14, 2026. This is a curated collection, not a live feed or a complete company list. Some visits are shared only through MustangJobs or campus email. Confirm details before going; Cal Poly sign-in is required for MustangJobs.</p>
     </section>
     <section class="results-section" aria-labelledby="results-title">
@@ -95,17 +101,18 @@
     </section>
     </div>
     <section id="about" class="info-panel" data-view aria-labelledby="about-title">
-      <div class="hero"><h1 id="about-title" tabindex="-1">A starting point.<br>An open door.</h1><p>Your next experience can start with a little curiosity.</p><span class="gold-rule" aria-hidden="true"></span></div>
+      <div class="hero"><h1 id="about-title" tabindex="-1">A student guide to Cal Poly.</h1><p>Find opportunities, places to study, and campus support in one place.</p></div>
       <div class="about-copy"><p>An independent student project to help you explore Cal Poly. Major and interest tags are discovery guides, not restrictions on who can participate.</p><p>Explore a snapshot of 406 San Luis Obispo student organizations from Cal Poly’s public directory, alongside additional campus programs. This is not a live openings feed. Check the official pages for current details.</p></div>
       <ol class="how-it-works">
-        <li><span class="step-number" aria-hidden="true">01</span><h2>Start with you</h2><p>Search your major or an interest, select a few interest chips, or browse the whole collection.</p></li>
-        <li><span class="step-number" aria-hidden="true">02</span><h2>Follow your curiosity</h2><p>Refine by opportunity type. Open a card to see why it connects to your search.</p></li>
-        <li><span class="step-number" aria-hidden="true">03</span><h2>Take the next step</h2><p>Expand the details and follow the official link to check current information and ways to get involved.</p></li>
+        <li><span class="step-number" aria-hidden="true">01</span><h2>Search or browse</h2><p>Search your major or an interest, select a few interest chips, or browse the whole collection.</p></li>
+        <li><span class="step-number" aria-hidden="true">02</span><h2>Compare your options</h2><p>Refine by opportunity type. Open a card to see why it connects to your search.</p></li>
+        <li><span class="step-number" aria-hidden="true">03</span><h2>Check the official source</h2><p>Expand the details and follow the official link to check current information and ways to get involved.</p></li>
       </ol>
       <a class="primary panel-action" href="#explore">Find your starting point <svg aria-hidden="true"><use href="icons.svg?v=20260913#arrow"></use></svg></a>
     </section>
     <section id="study" class="info-panel" data-view aria-labelledby="study-title">
-      <div class="hero"><span class="eyebrow">Make room for focus</span><h1 id="study-title" tabindex="-1">Find your kind of focus.</h1><p>A quiet corner, a group table, or a little fresh air.</p><span class="gold-rule" aria-hidden="true"></span></div>
+      <div class="hero"><h1 id="study-title" tabindex="-1">Find a place to study.</h1><p>Compare campus locations for quiet work, study groups, or time outside.</p></div>
+      <figure class="study-photo"><img src="assets/kennedy-library-2018.jpg" width="960" height="720" loading="lazy" decoding="async" alt="Kennedy Library exterior with concrete terraces and surrounding trees, photographed in 2018."><figcaption>Kennedy Library exterior, 2018, before the renovation. Photo: <a href="https://commons.wikimedia.org/wiki/File:Robert_E._Kennedy_Library,_exterior,_Cal_Poly_SLO_(September_2018).jpg">Stilfehler / Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Display cropped to fit.</figcaption></figure>
       <form id="study-form" role="search" aria-label="Study spots">
         <div class="search-bar"><svg class="search-icon" aria-hidden="true"><use href="icons.svg?v=20260913#search"></use></svg><label class="sr-only" for="study-search">Search a study spot, building, or feature</label><input id="study-search" type="search" maxlength="200" placeholder="Search a study spot, building, or feature"><button class="primary" type="submit">Find Study Spots</button></div>
         <fieldset class="filter-row"><legend>What helps you focus?</legend><div class="chips"><label class="chip"><input type="checkbox" name="study-filter" value="quiet"><span>Quiet study</span></label><label class="chip"><input type="checkbox" name="study-filter" value="group"><span>Group work</span></label><label class="chip"><input type="checkbox" name="study-filter" value="outdoors"><span>Outdoors</span></label><label class="chip"><input type="checkbox" name="study-filter" value="power"><span>Power access</span></label><label class="chip"><input type="checkbox" name="study-filter" value="computers"><span>Computers</span></label><label class="chip"><input type="checkbox" name="study-filter" value="reservable"><span>Reservable</span></label><label class="chip"><input type="checkbox" name="study-filter" value="late"><span>Late study</span></label></div></fieldset>
@@ -119,12 +126,12 @@
       <noscript><p>Enable JavaScript to search. <a href="https://library.calpoly.edu/visit/study-and-meeting-spaces">Browse official campus information</a>.</p></noscript>
     </section>
     <section id="resources" class="info-panel" data-view aria-labelledby="resources-title">
-      <div class="hero"><span class="eyebrow">A little help goes a long way</span><h1 id="resources-title" tabindex="-1">You don’t have to figure it out alone.</h1><p>Tools, guidance, and support for life at Cal Poly.</p><span class="gold-rule" aria-hidden="true"></span></div>
+      <div class="hero"><h1 id="resources-title" tabindex="-1">Find the campus help you need.</h1><p>Tools, guidance, and support for life at Cal Poly.</p></div>
       <form id="resources-form" role="search" aria-label="Campus resources">
         <div class="search-bar"><svg class="search-icon" aria-hidden="true"><use href="icons.svg?v=20260913#search"></use></svg><label class="sr-only" for="resources-search">Search tutoring, equipment, career help…</label><input id="resources-search" type="search" maxlength="200" placeholder="Search tutoring, equipment, career help…"><button class="primary" type="submit">Find Resources</button></div>
         <fieldset class="filter-row"><legend>What do you need?</legend><div class="chips"><label class="chip"><input type="checkbox" name="resources-filter" value="academic"><span>Learning</span></label><label class="chip"><input type="checkbox" name="resources-filter" value="making"><span>Making</span></label><label class="chip"><input type="checkbox" name="resources-filter" value="technology"><span>Technology</span></label><label class="chip"><input type="checkbox" name="resources-filter" value="career"><span>Careers</span></label><label class="chip"><input type="checkbox" name="resources-filter" value="support"><span>Support</span></label><label class="chip"><input type="checkbox" name="resources-filter" value="research"><span>Research</span></label><label class="chip"><input type="checkbox" name="resources-filter" value="recreation"><span>Recreation</span></label></div></fieldset>
       </form>
-      <section class="results-section" aria-labelledby="resources-results-title"><div class="results-heading"><h2 id="resources-results-title" tabindex="-1">Support for your next step</h2><button id="resources-clear" class="text-button" type="button">Clear filters</button></div>
+      <section class="results-section" aria-labelledby="resources-results-title"><div class="results-heading"><h2 id="resources-results-title" tabindex="-1">Campus services by need</h2><button id="resources-clear" class="text-button" type="button">Clear filters</button></div>
         <p id="resources-status" class="section-note" role="status">Loading the collection…</p><ul id="resources-results" class="card-grid" aria-label="Campus resources"></ul>
         <div id="resources-empty" class="empty-state" hidden><h3>No matches with these filters.</h3><p>Try another search or clear a filter to see more options.</p></div>
       </section>
@@ -133,7 +140,7 @@
       <noscript><p>Enable JavaScript to search. <a href="https://advising.calpoly.edu/">Browse official campus information</a>.</p></noscript>
     </section>
     <section id="bookmarks" class="info-panel" data-view aria-labelledby="bookmarks-title">
-      <div class="hero"><span class="eyebrow">Your own campus collection</span><h1 id="bookmarks-title" tabindex="-1">Keep what clicks.</h1><p>Opportunities, study spots, and resources worth coming back to.</p><span class="gold-rule" aria-hidden="true"></span></div>
+      <div class="hero"><h1 id="bookmarks-title" tabindex="-1">Your saved campus finds.</h1><p>Opportunities, study spots, and resources worth coming back to.</p></div>
       <p class="section-note">Saved in this browser. No account needed. Clearing site data removes your bookmarks; they do not sync between devices.</p>
       <form id="bookmarks-form" role="search" aria-label="Search bookmarks"><div class="search-bar"><svg class="search-icon" aria-hidden="true"><use href="icons.svg?v=20260913#search"></use></svg><label for="bookmarks-search" class="sr-only">Search your bookmarks</label><input id="bookmarks-search" type="search" maxlength="200" placeholder="Search your bookmarks"><button class="primary" type="submit">Search Bookmarks</button></div>
         <fieldset class="filter-row"><legend>Saved collection:</legend><div class="chips">
@@ -144,11 +151,11 @@
         </div></fieldset>
       </form>
       <section class="results-section" aria-labelledby="bookmarks-results-title"><div class="results-heading"><h2 id="bookmarks-results-title" tabindex="-1">Saved for later</h2><button id="bookmarks-clear" class="text-button" type="button">Clear filters</button></div><p id="bookmarks-status" class="section-note" role="status"></p><ul id="bookmarks-results" class="card-grid" aria-label="Bookmarked items"></ul><div class="results-pagination"><button id="bookmarks-more" class="primary" type="button" hidden>Show more bookmarks</button></div>
-        <div id="bookmarks-empty" class="empty-state"><svg aria-hidden="true"><use href="icons.svg?v=20260913#bookmark"></use></svg><h3>Your next discovery belongs here.</h3><p>Tap the bookmark icon on any card to save it for later.</p><a href="#explore">Explore opportunities</a></div>
+        <div id="bookmarks-empty" class="empty-state"><svg aria-hidden="true"><use href="icons.svg?v=20260913#bookmark"></use></svg><h3>No bookmarks yet.</h3><p>Tap the bookmark icon on any card to save it for later.</p><a href="#explore">Explore opportunities</a></div>
       </section>
     </section>
     <section id="report" class="info-panel report-panel" data-view aria-labelledby="report-title">
-      <div class="hero"><span class="eyebrow">Made better together</span><h1 id="report-title" tabindex="-1">Something not working?</h1><p>Help make campus discovery better for everyone.</p><span class="gold-rule" aria-hidden="true"></span></div>
+      <div class="hero"><h1 id="report-title" tabindex="-1">Something not working?</h1><p>Report a broken link, incorrect listing, or a problem using the site.</p></div>
       <p id="report-return" class="section-note" role="status" hidden>Thanks for helping improve campus discovery. Your form has returned from FormSubmit; email delivery still depends on the service and recipient’s inbox. You can add any further details below.</p>
       <div class="report-layout">
         <section class="report-box" aria-labelledby="bug-form-title">

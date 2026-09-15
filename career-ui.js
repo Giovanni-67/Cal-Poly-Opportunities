@@ -34,18 +34,20 @@
       const date = api.formatEvent(event);
       const stamp = element('time', date.date, 'career-date');
       stamp.dateTime = event.start;
-      card.append(stamp, element('h3', event.title), element('p', date.time, 'career-time'));
-      card.append(element('p', event.location || 'Location: check this event in MustangJobs.', 'career-location'));
+      const content = element('div', '', 'career-content');
+      card.append(stamp, content);
+      content.append(element('h3', event.title), element('p', date.time, 'career-time'));
+      content.append(element('p', event.location || 'Location: check this event in MustangJobs.', 'career-location'));
       if (event.companies.length) {
         const companies = element('p', 'Publicly announced: ', 'career-companies');
         event.companies.forEach((company, index) => {
           if (index) companies.append(document.createTextNode(', '));
           companies.append(link(company.name, company.source));
         });
-        card.append(companies);
+        content.append(companies);
       }
       const reason = query.trim() ? 'Matches your event or company search.' : type === 'company' ? 'Includes a publicly announced company visit.' : event.type === 'networking' ? 'Connect with employers through campus networking.' : 'Explore employers at an upcoming campus fair.';
-      card.append(element('p', reason, 'career-reason'), link('Official event details →', event.source));
+      content.append(element('p', reason, 'career-reason'), link('Official event details →', event.source));
       list.append(card);
     }
     status.textContent = matches.length ? `${visible.length} of ${matches.length} upcoming events in this collection.` : 'No upcoming events match this collection. Check MustangJobs for more; a missing company does not mean it is not visiting.';

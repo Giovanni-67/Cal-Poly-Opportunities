@@ -9,7 +9,8 @@ Search by major or interest, select multiple interests, and refine by opportunit
 - 429 sourced entries, including all 406 San Luis Obispo student organizations in the reviewed public Cal Poly Now snapshot. The original 18 entries are retained, 401 additional clubs are included without duplicates, and 10 research, startup, competition, and hands-on programs are added. Sources reviewed September 12, 2026.
 - Business, Arts, Service, and Outdoors interest filters join the original six. Search suggestions reflect the collection’s major and interest tags.
 - Results appear in batches of 24 with a Show more control. Searches cover the whole collection, including cards that have not been displayed yet. General-interest clubs can have no major association.
-- Responsive green-and-gold interface, animated centered cards and background blur, expandable details, keyboard focus management, and reduced-motion support.
+- Editorial campus guide layout with serif headings, compact filters, a dated career agenda, and opportunity listings separated by thin rules. Animated centered details and background blur, keyboard focus management, and reduced-motion support remain available.
+- Study locations are grouped by building; campus resources are grouped by student need; bookmarks use a compact list. The Study Spots view includes a credited, lazy-loaded 179 kB Kennedy Library photograph explicitly dated 2018, before the renovation. The page uses local system fonts and static title, description, canonical URL, and Open Graph text metadata.
 - Four primary tabs in order: Opportunities, Study Spots, Campus Resources, and Bookmarks. About stays in the footer. Desktop tabs become a keyboard-accessible mobile menu, with hash links, Back/Forward support, and preserved search state.
 - 10 study spots with source-backed feature filters, locations, and access notes; 14 campus resources spanning learning, making, technology, careers, support, research, and recreation. Reviewed September 13, 2026; seats, noise, equipment, and hours are not live.
 - Related activities appear separately after direct matches, with explicit topic or shared-tag explanations. Swimming directly finds Swim and Triathlon while suggesting other water activities. Connections cover diverse interests and respect opportunity type filters.
@@ -27,7 +28,7 @@ Serve this folder with any static HTTP server, such as `python -m http.server 80
 Run the dependency-free automated tests with Node.js 18 or newer:
 
 ```sh
-node --test tests/matcher.test.cjs tests/catalog.test.cjs tests/discovery.test.cjs tests/campus.test.cjs
+node --test tests/*.test.cjs
 node tests/check.cjs
 ```
 
